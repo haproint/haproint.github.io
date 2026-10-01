@@ -1,65 +1,252 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HAPRO INT. | Global Trade & Premium Distribution</title>
-<meta name="description" content="HAPRO INT. 글로벌 무역, K-푸드 수출 및 프리미엄 유통">
+<meta name="description" content="HAPRO INT. - Global Trade, K-Food Export and Premium Distribution. 글로벌 무역, K-푸드 수출 및 프리미엄 유통.">
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#080808;color:#fff;font-family:Arial,"Noto Sans KR",sans-serif;line-height:1.7}a{color:inherit;text-decoration:none}.wrap{width:90%;max-width:1200px;margin:auto}
-header{position:fixed;z-index:10;top:0;width:100%;background:rgba(8,8,8,.96);border-bottom:1px solid #55451b}.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.logo{font-size:24px;font-weight:700;letter-spacing:4px;color:#d4af37}.logo span{color:#fff}nav{display:flex;flex-wrap:wrap;gap:22px}nav a{font-size:11px;letter-spacing:1px;color:#ddd}nav a:hover{color:#d4af37}
-section{padding:105px 0;border-bottom:1px solid #171717}.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding-top:100px;background:radial-gradient(circle,rgba(212,175,55,.12),transparent 45%)}.hero h1{font-size:clamp(50px,9vw,100px);letter-spacing:8px;margin:10px 0}.gold,.label{color:#d4af37}.label{font-size:12px;letter-spacing:4px}.hero h2{color:#d4af37;letter-spacing:3px;font-size:clamp(18px,3vw,30px)}.hero .ko{color:#ddd;font-size:18px}.line{width:80px;height:1px;background:#d4af37;margin:28px auto}.title{font-size:38px;letter-spacing:2px;margin:6px 0}.ko-title{color:#d4af37;font-size:20px;margin-bottom:30px}.desc{max-width:850px;color:#ccc}.about{border-left:2px solid #d4af37;padding-left:28px;font-size:18px}.about .ko{color:#bbb;margin-top:18px}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:45px}.card{padding:32px;border:1px solid #55451b;background:#101010}.card h3{margin:0 0 5px}.card .ko{color:#d4af37}.card p{color:#aaa;font-size:14px}
-.main-img{width:100%;display:block;margin:40px 0 12px;border:1px solid #55451b;box-shadow:0 20px 60px #000}.caption{text-align:center;color:#999;font-size:12px}.twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:35px}.mini{padding:28px;background:#101010;border:1px solid #202020}.mini h3{margin:0 0 15px}.mini li{color:#ccc;padding:6px 0;border-bottom:1px solid #1c1c1c}.mini ul{padding-left:18px}
-.produce-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.pill{padding:8px 13px;border:1px solid #333;color:#ddd}.global{text-align:center;background:radial-gradient(circle,rgba(212,175,55,.1),transparent 50%)}.global h2{font-size:clamp(40px,7vw,72px);letter-spacing:5px}.contact{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:40px}.info,.form{padding:30px;background:#101010;border:1px solid #222}.item{margin-bottom:24px}.item b{display:block;color:#d4af37;font-size:12px;letter-spacing:2px}.form{display:flex;flex-direction:column;gap:13px}.form input,.form textarea{padding:14px;background:#111;border:1px solid #333;color:#fff;font:inherit}.form textarea{min-height:150px}.form button{padding:15px;background:#d4af37;border:1px solid #d4af37;font-weight:bold;cursor:pointer}.note{font-size:11px;color:#777;text-align:center}footer{text-align:center;padding:40px;color:#777}.footlogo{color:#d4af37;font-size:22px;letter-spacing:4px}
-@media(max-width:800px){.nav{flex-direction:column;padding:15px 0}nav{justify-content:center;gap:10px}.cards,.twocol,.contact{grid-template-columns:1fr}.title{font-size:30px}section{padding:80px 0}}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#080808;color:#fff;font-family:Arial,"Noto Sans KR",sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}
+.wrap{width:90%;max-width:1200px;margin:auto}
+header{position:fixed;z-index:1000;top:0;left:0;width:100%;background:rgba(8,8,8,.97);border-bottom:1px solid rgba(212,175,55,.3);backdrop-filter:blur(10px)}
+.nav{min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-size:24px;font-weight:700;letter-spacing:4px;color:#d4af37}
+.logo span{color:#fff}
+nav{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:22px}
+nav a{font-size:11px;letter-spacing:1.2px;color:#ddd}
+nav a:hover{color:#d4af37}
+section{padding:105px 0;border-bottom:1px solid #171717}
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding-top:100px;background:radial-gradient(circle at center,rgba(212,175,55,.13),transparent 45%),#080808}
+.label{color:#d4af37;font-size:12px;letter-spacing:4px}
+.hero h1{font-size:clamp(50px,9vw,100px);letter-spacing:8px;margin:12px 0}
+.hero h2{font-size:clamp(18px,3vw,30px);letter-spacing:3px;color:#d4af37}
+.hero .ko{color:#ddd;font-size:18px;margin-top:5px}
+.line{width:80px;height:1px;background:#d4af37;margin:28px auto}
+.hero p{font-size:17px}
+.title{font-size:38px;letter-spacing:2px;margin:7px 0}
+.ko-title{color:#d4af37;font-size:20px;margin-bottom:30px}
+.desc{max-width:850px;color:#ccc}
+.about{border-left:2px solid #d4af37;padding-left:28px;font-size:19px}
+.about .ko{color:#bbb;margin-top:18px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:45px}
+.card{padding:32px;border:1px solid rgba(212,175,55,.35);background:#101010}
+.card h3{margin-bottom:5px}
+.card .ko{color:#d4af37}
+.card p{color:#aaa;font-size:14px;margin-top:15px}
+.main-img{width:100%;display:block;margin-top:40px;border:1px solid rgba(212,175,55,.4);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.caption{text-align:center;color:#999;font-size:12px;margin-top:12px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:35px}
+.mini{padding:28px;background:#101010;border:1px solid #222}
+.mini h3{margin-bottom:15px}
+.mini ul{padding-left:18px}
+.mini li{padding:6px 0;color:#ccc;border-bottom:1px solid #1d1d1d}
+.produce-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:25px}
+.pill{padding:8px 14px;border:1px solid #333;color:#ddd}
+.global{text-align:center;background:radial-gradient(circle at center,rgba(212,175,55,.1),transparent 50%)}
+.global h2{font-size:clamp(40px,7vw,72px);letter-spacing:5px;margin:25px 0}
+.gold{color:#d4af37}
+.global .ko{font-size:22px;color:#ddd}
+.global .desc{margin:25px auto}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin-top:40px}
+.info,.form{padding:30px;background:#101010;border:1px solid #222}
+.item{margin-bottom:25px}
+.item b{display:block;color:#d4af37;font-size:12px;letter-spacing:2px;margin-bottom:5px}
+.website{color:#d4af37;text-decoration:underline;text-underline-offset:3px}
+.form{display:flex;flex-direction:column;gap:13px}
+.form input,.form textarea{width:100%;padding:14px;background:#111;border:1px solid #333;color:#fff;font:inherit;outline:none}
+.form input:focus,.form textarea:focus{border-color:#d4af37}
+.form textarea{min-height:150px;resize:vertical}
+.form button{padding:15px;background:#d4af37;color:#080808;border:1px solid #d4af37;font-weight:bold;letter-spacing:1.5px;cursor:pointer}
+.form button:hover{background:transparent;color:#d4af37}
+.note{font-size:11px;color:#777;text-align:center}
+footer{text-align:center;padding:42px;color:#777;background:#050505}
+.footlogo{font-size:22px;letter-spacing:4px;color:#d4af37;margin-bottom:8px}
+.footer-site{display:inline-block;color:#d4af37;margin-top:7px}
+@media(max-width:800px){
+.nav{flex-direction:column;padding:16px 0}
+nav{justify-content:center;gap:10px}
+nav a{font-size:9px}
+.cards,.twocol,.contact{grid-template-columns:1fr}
+section{padding:80px 0}
+.title{font-size:30px}
+}
+@media(max-width:480px){
+.logo{font-size:20px}
+nav{gap:8px}
+nav a{font-size:8px}
+.hero h1{letter-spacing:5px}
+.hero p{font-size:14px}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap nav"><a class="logo" href="#home">HAPRO <span>INT.</span></a><nav>
-<a href="#home">HOME</a><a href="#about">ABOUT</a><a href="#business">BUSINESS</a><a href="#kfood">K-FOOD</a><a href="#produce">PRODUCE</a><a href="#global">GLOBAL</a><a href="#contact">CONTACT</a>
-</nav></div></header>
 
-<section id="home" class="hero"><div><div class="label">GLOBAL TRADE & PREMIUM DISTRIBUTION</div><h1>HAPRO INT.</h1><h2>GLOBAL TRADE & PREMIUM DISTRIBUTION</h2><div class="ko">글로벌 무역 & 프리미엄 유통</div><div class="line"></div><p>Connecting Korea to the World.<br>대한민국의 우수한 제품을 세계 시장과 연결합니다.</p></div></section>
+<header>
+<div class="wrap nav">
+<a class="logo" href="#home">HAPRO <span>INT.</span></a>
+<nav>
+<a href="#home">HOME</a>
+<a href="#about">ABOUT</a>
+<a href="#business">BUSINESS</a>
+<a href="#kfood">K-FOOD</a>
+<a href="#produce">PRODUCE</a>
+<a href="#global">GLOBAL</a>
+<a href="#contact">CONTACT</a>
+</nav>
+</div>
+</header>
 
-<section id="about"><div class="wrap"><div class="label">ABOUT HAPRO INT.</div><h2 class="title">ABOUT HAPRO INT.</h2><div class="ko-title">하프로 소개</div><div class="about">Hapro Int. is a Korea-based global trade and distribution business focused on connecting quality Korean products with international markets and business partners.<div class="ko">Hapro Int.는 우수한 한국 제품과 해외 시장 및 비즈니스 파트너를 연결하는 글로벌 무역·유통 기업입니다.</div></div></div></section>
+<section id="home" class="hero">
+<div>
+<div class="label">GLOBAL TRADE & PREMIUM DISTRIBUTION</div>
+<h1>HAPRO INT.</h1>
+<h2>GLOBAL TRADE & PREMIUM DISTRIBUTION</h2>
+<div class="ko">글로벌 무역 & 프리미엄 유통</div>
+<div class="line"></div>
+<p>Connecting Korea to the World.<br>대한민국의 우수한 제품을 세계 시장과 연결합니다.</p>
+</div>
+</section>
 
-<section id="business"><div class="wrap"><div class="label">OUR BUSINESS</div><h2 class="title">OUR BUSINESS</h2><div class="ko-title">주요 사업</div><p class="desc">Global trade, K-Food export and premium distribution.<br><br>글로벌 무역, K-푸드 수출 및 프리미엄 유통을 중심으로 국내 우수 제품의 해외 시장 진출 기회를 개발합니다.</p><div class="cards">
-<div class="card"><h3>GLOBAL TRADE</h3><div class="ko">글로벌 무역</div><p>International sourcing, trading and business development.</p></div>
-<div class="card"><h3>K-FOOD EXPORT</h3><div class="ko">K-푸드 수출</div><p>Ramen, frozen kimbap, Korean beverages and dining experiences.</p></div>
-<div class="card"><h3>PREMIUM DISTRIBUTION</h3><div class="ko">프리미엄 유통</div><p>Premium Korean products and fresh produce.</p></div>
-</div></div></section>
+<section id="about">
+<div class="wrap">
+<div class="label">ABOUT HAPRO INT.</div>
+<h2 class="title">ABOUT HAPRO INT.</h2>
+<div class="ko-title">하프로 소개</div>
+<div class="about">
+Hapro Int. is a Korea-based global trade and distribution business focused on connecting quality Korean products with international markets and business partners.
+<div class="ko">Hapro Int.는 우수한 한국 제품과 해외 시장 및 비즈니스 파트너를 연결하는 글로벌 무역·유통 기업입니다.</div>
+</div>
+</div>
+</section>
 
-<section id="kfood"><div class="wrap"><div class="label">K-FOOD GLOBAL EXPORT</div><h2 class="title">K-FOOD GLOBAL EXPORT</h2><div class="ko-title">K-푸드 글로벌 수출</div><p class="desc">Selected Korean food products for international markets, retail channels and Korean food experiences.<br><br>해외 시장과 유통 채널을 위한 다양한 한국 식품을 글로벌 시장에 소개합니다.</p>
-<img class="main-img" src="kfood_global_export.png" alt="팔도라면 농심라면 삼양라면 김밥 참이슬 처음처럼 새로 양은냄비">
+<section id="business">
+<div class="wrap">
+<div class="label">OUR BUSINESS</div>
+<h2 class="title">OUR BUSINESS</h2>
+<div class="ko-title">주요 사업</div>
+<p class="desc">Global trade, K-Food export and premium distribution.<br><br>글로벌 무역, K-푸드 수출 및 프리미엄 유통을 중심으로 국내 우수 제품의 해외 시장 진출 기회를 개발합니다.</p>
+<div class="cards">
+<div class="card"><h3>GLOBAL TRADE</h3><div class="ko">글로벌 무역</div><p>International sourcing, trading and business development connecting Korean products with global partners.</p></div>
+<div class="card"><h3>K-FOOD EXPORT</h3><div class="ko">K-푸드 수출</div><p>Korean food products including ramen, frozen kimbap, beverages and Korean dining experiences.</p></div>
+<div class="card"><h3>PREMIUM DISTRIBUTION</h3><div class="ko">프리미엄 유통</div><p>Premium Korean products and fresh produce for domestic and international distribution channels.</p></div>
+</div>
+</div>
+</section>
+
+<section id="kfood">
+<div class="wrap">
+<div class="label">K-FOOD GLOBAL EXPORT</div>
+<h2 class="title">K-FOOD GLOBAL EXPORT</h2>
+<div class="ko-title">K-푸드 글로벌 수출</div>
+<p class="desc">Selected Korean food products for international markets, retail channels and Korean food experiences.<br><br>해외 시장과 유통 채널을 위한 다양한 한국 식품을 글로벌 시장에 소개합니다.</p>
+
+<img class="main-img" src="kfood_global_export.png" alt="팔도라면, 농심 신라면, 삼양 불닭볶음면, 김밥, 참이슬, 처음처럼, 새로, 양은냄비">
 <div class="caption">PALDO RAMYUN · NONGSHIM SHIN RAMYUN · SAMYANG BULDAK · KIMBAP · CHAMISUL · CHUM-CHURUM · SAERO · KOREAN ALUMINUM POT</div>
+
 <div class="twocol">
-<div class="mini"><h3>K-RAMEN / 한국 라면</h3><ul><li>Paldo Ramyun / 팔도라면</li><li>Nongshim Shin Ramyun / 농심 신라면</li><li>Samyang Buldak / 삼양 불닭볶음면</li><li>Paldo Teumsae Ramyun / 팔도 틈새라면</li></ul></div>
-<div class="mini"><h3>KIMBAP / 김밥</h3><ul><li>Frozen Kimbap / 냉동김밥</li><li>Vegetarian & Vegan Options / 채식·비건 옵션</li><li>Selected Korean Kimbap Products / 엄선 한국 김밥 제품</li></ul></div>
-<div class="mini"><h3>K-BEVERAGES / 한국 음료</h3><ul><li>Chamisul / 참이슬</li><li>Chum-Churum / 처음처럼</li><li>Saero / 새로</li></ul></div>
-<div class="mini"><h3>K-TABLE EXPERIENCE / K-테이블</h3><ul><li>Korean Aluminum Pot / 한국식 양은냄비</li><li>Ramen · Kimbap · Korean Beverages</li><li>Tableware · Display · Promotion</li></ul></div>
-</div></div></section>
+<div class="mini"><h3>K-RAMEN / 한국 라면</h3><ul>
+<li>Paldo Ramyun / 팔도라면</li>
+<li>Nongshim Shin Ramyun / 농심 신라면</li>
+<li>Samyang Buldak / 삼양 불닭볶음면</li>
+<li>Paldo Teumsae Ramyun / 팔도 틈새라면</li>
+</ul></div>
+<div class="mini"><h3>KIMBAP / 김밥</h3><ul>
+<li>Frozen Kimbap / 냉동김밥</li>
+<li>Vegetarian & Vegan Options / 채식·비건 옵션</li>
+<li>Selected Korean Kimbap Products / 엄선 한국 김밥 제품</li>
+</ul></div>
+<div class="mini"><h3>K-BEVERAGES / 한국 음료</h3><ul>
+<li>Chamisul / 참이슬</li>
+<li>Chum-Churum / 처음처럼</li>
+<li>Saero / 새로</li>
+</ul></div>
+<div class="mini"><h3>K-TABLE EXPERIENCE / K-테이블</h3><ul>
+<li>Korean Aluminum Pot / 한국식 양은냄비</li>
+<li>Ramen · Kimbap · Korean Beverages</li>
+<li>Tableware · Display · Promotion</li>
+</ul></div>
+</div>
+</div>
+</section>
 
-<section id="produce"><div class="wrap"><div class="label">PREMIUM FRESH PRODUCE</div><h2 class="title">PREMIUM FRESH PRODUCE</h2><div class="ko-title">프리미엄 신선식품</div><p class="desc">Selected fresh vegetables and premium leafy greens for reliable distribution and premium retail channels.<br><br>안정적인 공급과 프리미엄 유통을 위한 다양한 신선채소 및 프리미엄 잎채소를 취급합니다.</p>
-<img class="main-img" src="premium_fresh_produce.png" alt="프릴아이스 레드프릴아이스 루꼴라 미니로메인 버터헤드 카이피라 시즌별 엄선 제품">
+<section id="produce">
+<div class="wrap">
+<div class="label">PREMIUM FRESH PRODUCE</div>
+<h2 class="title">PREMIUM FRESH PRODUCE</h2>
+<div class="ko-title">프리미엄 신선식품</div>
+<p class="desc">Selected fresh vegetables and premium leafy greens for reliable distribution and premium retail channels.<br><br>안정적인 공급과 프리미엄 유통을 위한 다양한 신선채소 및 프리미엄 잎채소를 취급합니다.</p>
+<img class="main-img" src="premium_fresh_produce.png" alt="프릴아이스, 레드 프릴아이스, 루꼴라, 미니 로메인, 버터헤드, 카이피라, 시즌별 엄선 제품">
 <div class="caption">FRILL ICE · RED FRILL ICE · ROCKET · MINI ROMAINE · BUTTERHEAD · CAIPIRA · SELECTED SEASONAL PRODUCE</div>
-<div class="produce-list"><span class="pill">Frill Ice / 프릴아이스</span><span class="pill">Red Frill Ice / 레드 프릴아이스</span><span class="pill">Rocket / 루꼴라</span><span class="pill">Mini Romaine / 미니 로메인</span><span class="pill">Butterhead / 버터헤드</span><span class="pill">Caipira / 카이피라</span><span class="pill">Selected Seasonal Produce / 시즌별 엄선 제품</span></div>
-</div></section>
+<div class="produce-list">
+<span class="pill">Frill Ice / 프릴아이스</span>
+<span class="pill">Red Frill Ice / 레드 프릴아이스</span>
+<span class="pill">Rocket / 루꼴라</span>
+<span class="pill">Mini Romaine / 미니 로메인</span>
+<span class="pill">Butterhead / 버터헤드</span>
+<span class="pill">Caipira / 카이피라</span>
+<span class="pill">Selected Seasonal Produce / 시즌별 엄선 제품</span>
+</div>
+</div>
+</section>
 
-<section id="global" class="global"><div class="wrap"><div class="label">GLOBAL BUSINESS</div><h2>KOREA <span class="gold">→</span> GLOBAL</h2><div class="global-korean">한국에서 세계로</div><p class="desc" style="margin:25px auto">Hapro Int. aims to build sustainable business connections between Korean suppliers, international buyers and global distribution channels.<br><br>Hapro Int.는 한국의 우수한 공급자와 해외 바이어, 글로벌 유통 채널을 연결합니다.</p></div></section>
+<section id="global" class="global">
+<div class="wrap">
+<div class="label">GLOBAL BUSINESS</div>
+<h2>KOREA <span class="gold">→</span> GLOBAL</h2>
+<div class="ko">한국에서 세계로</div>
+<p class="desc">Hapro Int. aims to build sustainable business connections between Korean suppliers, international buyers and global distribution channels.<br><br>Hapro Int.는 한국의 우수한 공급자와 해외 바이어, 글로벌 유통 채널을 연결합니다.</p>
+</div>
+</section>
 
-<section id="contact"><div class="wrap"><div class="label">LET'S TALK BUSINESS</div><h2 class="title">CONTACT</h2><div class="ko-title">문의하기</div><div class="contact">
-<div class="info"><div class="item"><b>COMPANY / 회사</b>HAPRO INT.</div><div class="item"><b>ADDRESS / 주소</b>경기도 남양주시 화도읍<br>마석우리 71-4번지 201-902</div><div class="item"><b>BUSINESS / 사업</b>Global Trade & Premium Distribution<br>글로벌 무역 & 프리미엄 유통</div><div class="item"><b>EMAIL / 이메일</b>haproint@gmail.com</div></div>
-<form class="form" id="contactForm"><input id="company" placeholder="Company Name / 회사명" required><input id="name" placeholder="Your Name / 담당자명" required><input id="email" type="email" placeholder="Email Address / 이메일" required><input id="subject" placeholder="Subject / 문의 제목" required><textarea id="message" placeholder="Message / 문의 내용을 입력해주세요." required></textarea><button type="submit">SEND INQUIRY / 문의 보내기</button><div class="note">버튼을 누르면 이메일 작성창이 열립니다.</div></form>
-</div></div></section>
+<section id="contact">
+<div class="wrap">
+<div class="label">LET'S TALK BUSINESS</div>
+<h2 class="title">CONTACT</h2>
+<div class="ko-title">문의하기</div>
 
-<footer><div class="footlogo">HAPRO INT.</div><div>GLOBAL TRADE & PREMIUM DISTRIBUTION</div><div>haproint@gmail.com</div><div style="margin-top:15px">© 2026 HAPRO INT. ALL RIGHTS RESERVED.</div></footer>
+<div class="contact">
+<div class="info">
+<div class="item"><b>COMPANY / 회사</b>HAPRO INT.</div>
+<div class="item"><b>ADDRESS / 주소</b>경기도 남양주시 화도읍<br>마석우리 71-4번지 201-902</div>
+<div class="item"><b>WEBSITE / 홈페이지</b><a class="website" href="https://haproint.github.io/" target="_blank" rel="noopener">https://haproint.github.io/</a></div>
+<div class="item"><b>BUSINESS / 사업</b>Global Trade & Premium Distribution<br>글로벌 무역 & 프리미엄 유통</div>
+<div class="item"><b>EMAIL / 이메일</b><a href="mailto:haproint@gmail.com">haproint@gmail.com</a></div>
+</div>
+
+<form class="form" id="contactForm">
+<input id="company" type="text" placeholder="Company Name / 회사명" required>
+<input id="name" type="text" placeholder="Your Name / 담당자명" required>
+<input id="email" type="email" placeholder="Email Address / 이메일" required>
+<input id="subject" type="text" placeholder="Subject / 문의 제목" required>
+<textarea id="message" placeholder="Message / 문의 내용을 입력해주세요." required></textarea>
+<button type="submit">SEND INQUIRY / 문의 보내기</button>
+<div class="note">버튼을 누르면 이메일 작성창이 열립니다.</div>
+</form>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="footlogo">HAPRO INT.</div>
+<div>GLOBAL TRADE & PREMIUM DISTRIBUTION</div>
+<div><a class="footer-site" href="https://haproint.github.io/" target="_blank" rel="noopener">https://haproint.github.io/</a></div>
+<div style="margin-top:12px">haproint@gmail.com</div>
+<div style="margin-top:15px">© 2026 HAPRO INT. ALL RIGHTS RESERVED.</div>
+</footer>
 
 <script>
 document.getElementById("contactForm").addEventListener("submit",function(e){
 e.preventDefault();
-let b="회사명 / Company: "+company.value+"\n\n담당자명 / Name: "+name.value+"\n\n이메일 / Email: "+email.value+"\n\n문의 내용 / Message:\n\n"+message.value;
-location.href="mailto:haproint@gmail.com?subject="+encodeURIComponent("[HAPRO INT. 홈페이지 문의] "+subject.value)+"&body="+encodeURIComponent(b);
+const company=document.getElementById("company").value;
+const name=document.getElementById("name").value;
+const email=document.getElementById("email").value;
+const subject=document.getElementById("subject").value;
+const message=document.getElementById("message").value;
+const body="회사명 / Company: "+company+"\n\n담당자명 / Name: "+name+"\n\n이메일 / Email: "+email+"\n\n문의 내용 / Message:\n\n"+message;
+window.location.href="mailto:haproint@gmail.com?subject="+encodeURIComponent("[HAPRO INT. 홈페이지 문의] "+subject)+"&body="+encodeURIComponent(body);
 });
 </script>
 </body>
