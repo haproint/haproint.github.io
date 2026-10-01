@@ -6,7 +6,8 @@
 
 <title>HAPRO INT. | Global Trade & Premium Distribution</title>
 
-<meta name="description" content="HAPRO INT. - Global Trade, K-Food Export and Premium Distribution. 글로벌 무역, K-푸드 수출 및 프리미엄 유통.">
+<meta name="description"
+content="HAPRO INT. - Global Trade, K-Food Export and Premium Distribution. 글로벌 무역, K-푸드 수출 및 프리미엄 유통.">
 
 <style>
 
@@ -48,16 +49,17 @@ header {
     left: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(8,8,8,0.95);
+    background: rgba(8,8,8,0.96);
     border-bottom: 1px solid rgba(212,175,55,0.25);
     backdrop-filter: blur(10px);
 }
 
 .nav {
-    height: 78px;
+    min-height: 78px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 25px;
 }
 
 .logo {
@@ -65,6 +67,7 @@ header {
     font-weight: bold;
     letter-spacing: 4px;
     color: #d4af37;
+    white-space: nowrap;
 }
 
 .logo span {
@@ -73,12 +76,14 @@ header {
 
 nav {
     display: flex;
-    gap: 28px;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 nav a {
-    font-size: 12px;
-    letter-spacing: 1.5px;
+    font-size: 11px;
+    letter-spacing: 1.4px;
     color: #dddddd;
     transition: 0.3s;
 }
@@ -96,10 +101,15 @@ nav a:hover {
     display: flex;
     align-items: center;
     text-align: center;
+    padding-top: 100px;
+
     background:
-        radial-gradient(circle at center, rgba(212,175,55,0.12), transparent 45%),
+        radial-gradient(
+            circle at center,
+            rgba(212,175,55,0.12),
+            transparent 45%
+        ),
         #080808;
-    padding-top: 78px;
 }
 
 .hero-content {
@@ -124,7 +134,7 @@ nav a:hover {
     color: #d4af37;
     font-size: clamp(18px, 3vw, 30px);
     letter-spacing: 3px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .hero-korean {
@@ -146,7 +156,7 @@ nav a:hover {
 }
 
 /* =========================
-   SECTION
+   SECTIONS
 ========================= */
 
 section {
@@ -339,6 +349,7 @@ section {
 
 .global-section {
     text-align: center;
+
     background:
         radial-gradient(
             circle at center,
@@ -386,7 +397,7 @@ section {
 }
 
 .contact-item {
-    margin-bottom: 25px;
+    margin-bottom: 28px;
 }
 
 .contact-item:last-child {
@@ -398,12 +409,20 @@ section {
     color: #d4af37;
     font-size: 12px;
     letter-spacing: 2px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
 
 .contact-item span {
     color: #eeeeee;
 }
+
+.address {
+    line-height: 1.8;
+}
+
+/* =========================
+   CONTACT FORM
+========================= */
 
 .contact-form {
     display: flex;
@@ -415,11 +434,14 @@ section {
 .contact-form textarea {
     width: 100%;
     padding: 15px;
+
     background: #111111;
     border: 1px solid rgba(255,255,255,0.15);
+
     color: #ffffff;
     font-family: inherit;
     font-size: 14px;
+
     outline: none;
 }
 
@@ -435,11 +457,14 @@ section {
 
 .contact-form button {
     padding: 16px;
+
     border: 1px solid #d4af37;
     background: #d4af37;
     color: #080808;
+
     font-weight: bold;
     letter-spacing: 2px;
+
     cursor: pointer;
     transition: 0.3s;
 }
@@ -447,6 +472,13 @@ section {
 .contact-form button:hover {
     background: transparent;
     color: #d4af37;
+}
+
+.contact-note {
+    margin-top: 2px;
+    color: #777777;
+    font-size: 11px;
+    text-align: center;
 }
 
 /* =========================
@@ -483,24 +515,22 @@ footer {
 @media (max-width: 800px) {
 
     .nav {
-        height: auto;
         padding: 18px 0;
         flex-direction: column;
         gap: 15px;
     }
 
     nav {
-        flex-wrap: wrap;
         justify-content: center;
-        gap: 13px;
+        gap: 12px;
     }
 
     nav a {
-        font-size: 10px;
+        font-size: 9px;
     }
 
     .hero {
-        padding-top: 130px;
+        padding-top: 150px;
     }
 
     .hero h1 {
@@ -525,12 +555,59 @@ footer {
         gap: 30px;
     }
 
+    .section-title {
+        font-size: 30px;
+    }
+
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+    .logo {
+        font-size: 21px;
+    }
+
+    nav {
+        gap: 9px;
+    }
+
+    nav a {
+        font-size: 8px;
+    }
+
+    .hero-label {
+        font-size: 10px;
+        letter-spacing: 3px;
+    }
+
+    .hero h2 {
+        font-size: 17px;
+    }
+
+    .hero-korean {
+        font-size: 16px;
+    }
+
+    .hero-tagline {
+        font-size: 14px;
+    }
+
+    .section-description {
+        font-size: 14px;
+    }
+
 }
 
 </style>
 </head>
 
+
 <body>
+
 
 <!-- =========================
      HEADER
@@ -614,14 +691,14 @@ footer {
 <div class="about-box">
 
 <p class="about-en">
-    Hapro Int. is a Korea-based global trade and distribution business
-    focused on connecting quality Korean products with international
-    markets and business partners.
+    Hapro Int. is a Korea-based global trade and distribution
+    business focused on connecting quality Korean products
+    with international markets and business partners.
 </p>
 
 <p class="about-ko">
-    Hapro Int.는 우수한 한국 제품과 해외 시장 및 비즈니스 파트너를
-    연결하는 글로벌 무역·유통 기업입니다.
+    Hapro Int.는 우수한 한국 제품과 해외 시장 및
+    비즈니스 파트너를 연결하는 글로벌 무역·유통 기업입니다.
 </p>
 
 </div>
@@ -652,15 +729,20 @@ footer {
 </div>
 
 <p class="section-description">
-    We develop business opportunities across global trade,
-    K-Food export and premium distribution.
-    <br><br>
-    글로벌 무역, K-푸드 수출 및 프리미엄 유통을 중심으로
-    국내 우수 제품의 해외 시장 진출 기회를 개발합니다.
+
+We develop business opportunities across global trade,
+K-Food export and premium distribution.
+
+<br><br>
+
+글로벌 무역, K-푸드 수출 및 프리미엄 유통을 중심으로
+국내 우수 제품의 해외 시장 진출 기회를 개발합니다.
+
 </p>
 
 
 <div class="business-grid">
+
 
 <div class="business-card">
 
@@ -668,7 +750,9 @@ footer {
 
 <h3>GLOBAL TRADE</h3>
 
-<div class="ko">글로벌 무역</div>
+<div class="ko">
+    글로벌 무역
+</div>
 
 <p>
 International sourcing, trading and business development
@@ -684,7 +768,9 @@ connecting Korean products with global partners.
 
 <h3>K-FOOD EXPORT</h3>
 
-<div class="ko">K-푸드 수출</div>
+<div class="ko">
+    K-푸드 수출
+</div>
 
 <p>
 Korean food products including ramen, frozen kimbap,
@@ -700,7 +786,9 @@ beverages and Korean dining experiences.
 
 <h3>PREMIUM DISTRIBUTION</h3>
 
-<div class="ko">프리미엄 유통</div>
+<div class="ko">
+    프리미엄 유통
+</div>
 
 <p>
 Premium Korean products and fresh produce for
@@ -708,6 +796,7 @@ domestic and international distribution channels.
 </p>
 
 </div>
+
 
 </div>
 
@@ -737,24 +826,28 @@ domestic and international distribution channels.
 </div>
 
 <p class="section-description">
-    Selected Korean food products for international markets,
-    retail channels and Korean food experiences.
-    <br><br>
-    해외 시장, 유통 채널 및 K-Food 경험을 위한
-    다양한 한국 식품을 글로벌 시장에 소개합니다.
+
+Selected Korean food products for international markets,
+retail channels and Korean food experiences.
+
+<br><br>
+
+해외 시장, 유통 채널 및 K-Food 경험을 위한
+다양한 한국 식품을 글로벌 시장에 소개합니다.
+
 </p>
 
 
 <div class="kfood-grid">
 
 
-<!-- RAMEN -->
-
 <div class="kfood-card">
 
 <h3>K-RAMEN</h3>
 
-<div class="ko">한국 라면</div>
+<div class="ko">
+    한국 라면
+</div>
 
 <ul class="kfood-list">
 
@@ -771,13 +864,13 @@ domestic and international distribution channels.
 </div>
 
 
-<!-- KIMBAP -->
-
 <div class="kfood-card">
 
 <h3>K-FROZEN KIMBAP</h3>
 
-<div class="ko">냉동김밥</div>
+<div class="ko">
+    냉동김밥
+</div>
 
 <ul class="kfood-list">
 
@@ -794,13 +887,13 @@ domestic and international distribution channels.
 </div>
 
 
-<!-- BEVERAGES -->
-
 <div class="kfood-card">
 
 <h3>K-BEVERAGES</h3>
 
-<div class="ko">한국 음료</div>
+<div class="ko">
+    한국 음료
+</div>
 
 <ul class="kfood-list">
 
@@ -815,13 +908,13 @@ domestic and international distribution channels.
 </div>
 
 
-<!-- TABLE EXPERIENCE -->
-
 <div class="kfood-card">
 
 <h3>K-TABLE EXPERIENCE</h3>
 
-<div class="ko">K-테이블 익스피리언스</div>
+<div class="ko">
+    K-테이블 익스피리언스
+</div>
 
 <ul class="kfood-list">
 
@@ -866,15 +959,20 @@ domestic and international distribution channels.
 </div>
 
 <p class="section-description">
-    Selected fresh vegetables and premium leafy greens
-    for reliable distribution and premium retail channels.
-    <br><br>
-    안정적인 공급과 프리미엄 유통을 위한
-    다양한 신선채소 및 프리미엄 잎채소를 취급합니다.
+
+Selected fresh vegetables and premium leafy greens
+for reliable distribution and premium retail channels.
+
+<br><br>
+
+안정적인 공급과 프리미엄 유통을 위한
+다양한 신선채소 및 프리미엄 잎채소를 취급합니다.
+
 </p>
 
 
 <div class="produce-box">
+
 
 <div class="produce-category">
     LEAFY GREENS / 잎채소
@@ -929,6 +1027,7 @@ domestic and international distribution channels.
 </div>
 
 </div>
+
 
 </div>
 
@@ -996,12 +1095,16 @@ Hapro Int.는 한국의 우수한 공급자와 해외 바이어,
     문의하기
 </div>
 
+
 <div class="contact-grid">
 
 
-<!-- CONTACT INFO -->
+<!-- =========================
+     COMPANY INFORMATION
+========================= -->
 
 <div class="contact-info">
+
 
 <div class="contact-item">
 
@@ -1009,6 +1112,18 @@ Hapro Int.는 한국의 우수한 공급자와 해외 바이어,
 
 <span>
 HAPRO INT.
+</span>
+
+</div>
+
+
+<div class="contact-item">
+
+<strong>ADDRESS / 주소</strong>
+
+<span class="address">
+경기도 남양주시 화도읍<br>
+마석우리 71-4번지 201-902
 </span>
 
 </div>
@@ -1037,82 +1152,62 @@ haproint@gmail.com
 
 </div>
 
+
 </div>
 
 
-<!-- CONTACT FORM -->
+<!-- =========================
+     CONTACT FORM
+========================= -->
 
-<form class="contact-form"
-      action="https://formsubmit.co/haproint@gmail.com"
-      method="POST">
-
-<input
-    type="hidden"
-    name="_subject"
-    value="HAPRO INT. 홈페이지 문의"
+<form
+    class="contact-form"
+    id="contactForm"
 >
-
-<input
-    type="hidden"
-    name="_template"
-    value="table"
->
-
-<input
-    type="hidden"
-    name="_captcha"
-    value="true"
->
-
-<input
-    type="hidden"
-    name="_next"
-    value="https://haproint.github.io/"
->
-
 
 <input
     type="text"
-    name="company"
+    id="company"
     placeholder="Company Name / 회사명"
     required
 >
 
-
 <input
     type="text"
-    name="name"
+    id="name"
     placeholder="Your Name / 담당자명"
     required
 >
 
-
 <input
     type="email"
-    name="email"
+    id="email"
     placeholder="Email Address / 이메일"
     required
 >
 
-
 <input
     type="text"
-    name="subject"
+    id="subject"
     placeholder="Subject / 문의 제목"
     required
 >
 
-
 <textarea
-    name="message"
+    id="message"
     placeholder="Message / 문의 내용을 입력해주세요."
     required
 ></textarea>
 
-
 <button type="submit">
     SEND INQUIRY / 문의 보내기
 </button>
+
+<div class="contact-note">
+    Clicking the button will open your email application.
+    <br>
+    버튼을 누르면 이메일 작성창이 열립니다.
+</div>
 
 </form>
 
@@ -1151,6 +1246,64 @@ haproint@gmail.com
 </div>
 
 </footer>
+
+
+<!-- =========================
+     CONTACT EMAIL SCRIPT
+========================= -->
+
+<script>
+
+document
+.getElementById("contactForm")
+.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const company =
+        document.getElementById("company").value.trim();
+
+    const name =
+        document.getElementById("name").value.trim();
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const subject =
+        document.getElementById("subject").value.trim();
+
+    const message =
+        document.getElementById("message").value.trim();
+
+
+    const mailSubject =
+        "[HAPRO INT. 홈페이지 문의] " + subject;
+
+
+    const mailBody =
+        "회사명 / Company: " + company + "\n\n" +
+        "담당자명 / Name: " + name + "\n\n" +
+        "이메일 / Email: " + email + "\n\n" +
+        "문의 내용 / Message:\n\n" +
+        message + "\n\n" +
+        "--------------------------------\n" +
+        "HAPRO INT. Website Contact";
+
+
+    const mailto =
+        "mailto:haproint@gmail.com" +
+        "?subject=" +
+        encodeURIComponent(mailSubject) +
+        "&body=" +
+        encodeURIComponent(mailBody);
+
+
+    window.location.href = mailto;
+
+});
+
+</script>
+
 
 </body>
 </html>
