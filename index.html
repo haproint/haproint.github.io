@@ -892,7 +892,12 @@ html[lang="ar"] #halal-certificates .hapro-cert-field{direction:rtl;text-align:r
 html[lang="ar"] .panel > .hapro-brand-ltr { text-align:right !important; }
 html[lang="ar"] footer > .hapro-brand-ltr { text-align:center !important; }
 html[lang="ar"] .hero .hapro-brand-ltr { text-align:center !important; }
-</style></head>
+</style><script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HGRY3V717M"></script><script>/* Hapro Int. GA4: aggregated site analytics; no form data or personal identifiers sent. */
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HGRY3V717M');
+</script></head>
 <body>
 <header>
 <div class="wrap nav">
@@ -1923,5 +1928,19 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 new MutationObserver(apply).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
 window.addEventListener('pageshow',apply);
 })();
-</script><script>(function(){'use strict';var nodes=document.querySelectorAll('#halal-certificates [data-hapro-ko],nav a[href="#halal-certificates"] [data-hapro-ko],.hapro-cert-inline-link [data-hapro-ko]');function sync(){var lang=(document.documentElement.lang||'ko').split('-')[0];if(!/^(ko|en|ja|zh|ar)$/.test(lang))lang='ko';nodes.forEach(function(el){var t=el.getAttribute('data-hapro-'+lang);if(t!==null)el.textContent=t;});}new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();})();</script></body>
+</script><script>(function(){'use strict';var nodes=document.querySelectorAll('#halal-certificates [data-hapro-ko],nav a[href="#halal-certificates"] [data-hapro-ko],.hapro-cert-inline-link [data-hapro-ko]');function sync(){var lang=(document.documentElement.lang||'ko').split('-')[0];if(!/^(ko|en|ja|zh|ar)$/.test(lang))lang='ko';nodes.forEach(function(el){var t=el.getAttribute('data-hapro-'+lang);if(t!==null)el.textContent=t;});}new MutationObserver(sync).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();})();</script><script>/* Count intentional language choices only; avoid recording names, emails or form content. */
+(function(){'use strict';
+  var allowed={ko:1,en:1,ja:1,zh:1,ar:1};
+  document.querySelectorAll('.hapro-lang-button[data-hapro-lang]').forEach(function(button){
+    button.addEventListener('click',function(){
+      var lang=button.getAttribute('data-hapro-lang');
+      if(!allowed[lang] || button.getAttribute('aria-pressed')==='true')return;
+      if(typeof window.gtag==='function')window.gtag('event','language_select',{
+        site_language:lang,
+        event_category:'language_navigation'
+      });
+    });
+  });
+})();
+</script></body>
 </html>
