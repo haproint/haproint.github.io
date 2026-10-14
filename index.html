@@ -1942,7 +1942,7 @@ window.addEventListener('pageshow',apply);
   document.querySelectorAll('.hapro-lang-button[data-hapro-lang]').forEach(function(button){
     button.addEventListener('click',function(){
       var lang=button.getAttribute('data-hapro-lang');
-      if(!allowed[lang] || button.getAttribute('aria-pressed')==='true')return;
+      if(!allowed[lang])return;
       if(typeof window.gtag==='function')window.gtag('event','language_select',{
         site_language:lang,
         event_category:'language_navigation'
