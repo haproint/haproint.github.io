@@ -1714,6 +1714,14 @@ if (!response.ok || !result.success) {
   throw new Error(result.error || "문의 접수에 실패했습니다.");
 }
 
+/* GA4: confirmed server-side contact acceptance only. No personal form data. */
+if (typeof window.gtag === "function") {
+  window.gtag("event", "generate_lead", {
+    lead_source: "website_contact",
+    site_language: (document.documentElement.lang || "ko").split("-")[0]
+  });
+}
+
 if (window.turnstile) {
   window.turnstile.reset();
 }
@@ -1942,5 +1950,46 @@ window.addEventListener('pageshow',apply);
     });
   });
 })();
-</script></body>
+</script>
+<script id="hapro-ga4-buyer-analysis">
+/* Analytics-only enhancement: no changes to the site's visuals or form logic. */
+(function () {
+  'use strict';
+  var ids = ['kfood', 'halal-certificates', 'kbeauty', 'produce', 'health', 'fashion', 'appliances', 'contact'];
+  var visited = Object.create(null);
+  function language() {
+    var lang = (document.documentElement.lang || 'ko').toLowerCase().split('-')[0];
+    return /^(ko|en|ja|zh|ar)$/.test(lang) ? lang : 'ko';
+  }
+  function send(name, fields) {
+    if (typeof window.gtag === 'function') window.gtag('event', name, fields);
+  }
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var id = entry.target.id;
+        if (visited[id]) return;
+        visited[id] = true;
+        send('business_section_view', {section_name:id, site_language:language()});
+        observer.unobserve(entry.target);
+      });
+    }, {threshold:0.15});
+    ids.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  }
+  var contact = document.getElementById('contactForm');
+  if (contact) {
+    var started = false;
+    contact.addEventListener('focusin', function (e) {
+      if (started || !e.target.matches('input, textarea, select')) return;
+      started = true;
+      send('contact_form_start', {site_language:language()});
+    });
+  }
+})();
+</script>
+</body>
 </html>
