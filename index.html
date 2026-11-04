@@ -1042,6 +1042,23 @@ gtag('config', 'G-HGRY3V717M');
 </div>
 </div>
 </div>
+<div class="panel" id="guestPostBox" style="margin-bottom:22px">
+<div class="label">VISITOR BOARD</div>
+<h3 data-hapro-ko="방문자 게시판" data-hapro-en="Visitor Board" data-hapro-ja="訪問者掲示板" data-hapro-zh="访客留言板" data-hapro-ar="لوحة الزوار">방문자 게시판</h3>
+<p class="status" data-hapro-ko="방문자는 비밀번호로 글을 작성하고 본인 글을 수정·삭제할 수 있습니다." data-hapro-en="Visitors can publish posts and edit or delete their own posts using a password." data-hapro-ja="訪問者はパスワードで投稿・編集・削除できます。" data-hapro-zh="访客可通过密码发帖、编辑和删除自己的帖子。" data-hapro-ar="يمكن للزوار النشر وتعديل منشوراتهم أو حذفها باستخدام كلمة مرور.">방문자는 비밀번호로 글을 작성하고 본인 글을 수정·삭제할 수 있습니다.</p>
+<form class="stack" id="guestCreateForm">
+<input id="guestTitle" maxlength="100" required placeholder="제목 / Title" data-hapro-ko-placeholder="제목" data-hapro-en-placeholder="Title" data-hapro-ja-placeholder="タイトル" data-hapro-zh-placeholder="标题" data-hapro-ar-placeholder="العنوان">
+<input id="guestAuthor" maxlength="50" required placeholder="작성자 / Author" data-hapro-ko-placeholder="작성자" data-hapro-en-placeholder="Author" data-hapro-ja-placeholder="投稿者" data-hapro-zh-placeholder="作者" data-hapro-ar-placeholder="الكاتب">
+<textarea id="guestContent" maxlength="10000" required placeholder="내용 / Content" data-hapro-ko-placeholder="내용" data-hapro-en-placeholder="Content" data-hapro-ja-placeholder="本文" data-hapro-zh-placeholder="内容" data-hapro-ar-placeholder="المحتوى"></textarea>
+<input id="guestPassword" type="password" minlength="8" maxlength="128" required autocomplete="new-password" placeholder="게시글 비밀번호 (8자 이상) / Password" data-hapro-ko-placeholder="게시글 비밀번호 (8자 이상)" data-hapro-en-placeholder="Post password (8+ characters)" data-hapro-ja-placeholder="投稿パスワード（8文字以上）" data-hapro-zh-placeholder="帖子密码（至少8位）" data-hapro-ar-placeholder="كلمة مرور المنشور (8 أحرف على الأقل)">
+<button class="btn" type="submit" data-hapro-ko="방문자 글 등록" data-hapro-en="PUBLISH VISITOR POST" data-hapro-ja="投稿する" data-hapro-zh="发布帖子" data-hapro-ar="نشر المنشور">방문자 글 등록</button>
+</form><p id="guestStatus" class="status" role="status"></p>
+<div class="board-list" style="margin-top:20px"><div class="board-head"><span>NO.</span><span data-hapro-ko="제목" data-hapro-en="TITLE" data-hapro-ja="タイトル" data-hapro-zh="标题" data-hapro-ar="العنوان">제목</span><span data-hapro-ko="날짜" data-hapro-en="DATE" data-hapro-ja="日付" data-hapro-zh="日期" data-hapro-ar="التاريخ">날짜</span></div><div id="guestBoardList" aria-live="polite"></div></div>
+<div id="guestDetail" class="post-detail hidden"><h3 id="guestDetailTitle"></h3><p class="post-meta" id="guestDetailMeta"></p><div class="post-content" id="guestDetailContent"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn secondary" id="guestEditBtn" data-hapro-ko="수정" data-hapro-en="EDIT" data-hapro-ja="編集" data-hapro-zh="编辑" data-hapro-ar="تعديل">수정</button><button type="button" class="btn danger" id="guestDeleteBtn" data-hapro-ko="삭제" data-hapro-en="DELETE" data-hapro-ja="削除" data-hapro-zh="删除" data-hapro-ar="حذف">삭제</button><button type="button" class="btn secondary" id="guestCloseBtn" data-hapro-ko="닫기" data-hapro-en="CLOSE" data-hapro-ja="閉じる" data-hapro-zh="关闭" data-hapro-ar="إغلاق">닫기</button></div>
+<form id="guestEditForm" class="stack hidden" style="margin-top:18px"><input id="guestEditTitle" required maxlength="100" placeholder="제목 / Title"><input id="guestEditAuthor" readonly maxlength="50" placeholder="작성자 (변경 불가) / Author (read only)"><textarea id="guestEditContent" required maxlength="10000" placeholder="내용 / Content"></textarea><input id="guestEditPassword" type="password" required placeholder="작성 시 비밀번호 / Post password"><button class="btn" type="submit">SAVE / 저장</button></form>
+<p class="status" id="guestDetailStatus" role="status"></p>
+</div></div>
 <div class="panel hidden" id="adminPostBox">
 <div class="label">NEW POST</div>
 <h3 data-hapro-ar="إنشاء منشور" data-hapro-en="Create Post" data-hapro-ja="投稿を作成" data-hapro-zh="创建帖子">게시글 작성</h3>
@@ -1858,6 +1875,36 @@ async function initialize() {
 
 initialize();
 
+</script>
+<script id="hapro-visitor-board-2026">
+(function(){'use strict';
+const el=id=>document.getElementById(id); let items=[],selected=null;
+const status=(id,msg,err=false)=>{el(id).textContent=msg;el(id).classList.toggle('error',err);};
+const rpc=async(name,args)=>{const {data,error}=await db.rpc(name,args);if(error)throw error;return data;};
+function errText(e){return e&&e.message?e.message:String(e);}
+async function refresh(){
+ try{
+  const {data,error}=await db.from('guest_board_posts').select('id,title,author,content,created_at,updated_at').order('created_at',{ascending:false}).limit(100);
+  if(error)throw error;items=data||[];const root=el('guestBoardList');root.replaceChildren();
+  if(!items.length){const empty=document.createElement('div');empty.className='post-row';empty.textContent='등록된 방문자 게시글이 없습니다.';root.append(empty);return;}
+  items.forEach((post,i)=>{const row=document.createElement('div');row.className='post-row';const num=document.createElement('span');num.textContent=String(items.length-i);const btn=document.createElement('button');btn.type='button';btn.textContent=post.title;btn.addEventListener('click',()=>open(post.id));const date=document.createElement('span');date.textContent=new Date(post.created_at).toLocaleDateString(document.documentElement.lang||'ko');row.append(num,btn,date);root.append(row);});
+ }catch(e){status('guestStatus','방문자 게시판 조회 실패: '+errText(e),true);}
+}
+function open(id){selected=items.find(p=>String(p.id)===String(id));if(!selected)return;el('guestDetailTitle').textContent=selected.title;el('guestDetailMeta').textContent=selected.author+' | '+new Date(selected.created_at).toLocaleString(document.documentElement.lang||'ko');el('guestDetailContent').textContent=selected.content;el('guestDetail').classList.remove('hidden');el('guestEditForm').classList.add('hidden');status('guestDetailStatus','');}
+el('guestCreateForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;const btn=form.querySelector('button[type=submit]');btn.disabled=true;try{
+ const password=el('guestPassword').value;if(password.length<8)throw Error('비밀번호는 8자 이상이어야 합니다.');
+ await rpc('guest_post_create',{p_title:el('guestTitle').value.trim(),p_author:el('guestAuthor').value.trim(),p_content:el('guestContent').value.trim(),p_password:password});form.reset();status('guestStatus','방문자 게시글이 등록되었습니다.');await refresh();
+ }catch(err){status('guestStatus','등록 실패: '+errText(err),true);}finally{btn.disabled=false;}});
+el('guestCloseBtn').addEventListener('click',()=>{selected=null;el('guestDetail').classList.add('hidden');});
+el('guestEditBtn').addEventListener('click',()=>{if(!selected)return;el('guestEditTitle').value=selected.title;el('guestEditAuthor').value=selected.author;el('guestEditContent').value=selected.content;el('guestEditPassword').value='';el('guestEditForm').classList.remove('hidden');});
+el('guestEditForm').addEventListener('submit',async e=>{e.preventDefault();if(!selected)return;const btn=e.currentTarget.querySelector('button[type=submit]');btn.disabled=true;const id=selected.id;try{
+ const updated=await rpc('guest_post_update',{p_id:id,p_password:el('guestEditPassword').value,p_title:el('guestEditTitle').value.trim(),p_content:el('guestEditContent').value.trim()});if(updated!==true)throw Error('비밀번호가 일치하지 않거나 게시글을 찾을 수 없습니다.');
+ // The server RPC accepts title and content only; author remains unchanged.
+ status('guestDetailStatus','수정되었습니다.');await refresh();open(id);
+ }catch(err){status('guestDetailStatus','수정 실패: '+errText(err),true);}finally{btn.disabled=false;}});
+el('guestDeleteBtn').addEventListener('click',async()=>{if(!selected)return;const password=window.prompt('게시글 비밀번호를 입력하세요. / Enter post password');if(password===null)return;if(!window.confirm('게시글을 삭제하시겠습니까?'))return;try{const deleted=await rpc('guest_post_delete',{p_id:selected.id,p_password:password});if(deleted!==true)throw Error('비밀번호가 일치하지 않거나 게시글을 찾을 수 없습니다.');selected=null;el('guestDetail').classList.add('hidden');status('guestStatus','삭제되었습니다.');await refresh();}catch(err){status('guestDetailStatus','삭제 실패: '+errText(err),true);}});
+refresh();
+})();
 </script>
 <script id="hapro-bilingual-2026-js">/* Hapro Int. five-language translation controller. Business logic untouched. */
 (function(){'use strict';
