@@ -904,6 +904,15 @@ gtag('config', 'G-HGRY3V717M');
 #buying-inquiry input,#buying-inquiry textarea{margin-top:4px}
 #buying-inquiry .panel{border:1px solid #514226;border-radius:9px}
 </style>
+<style id="hapro-admin-replies-css">
+.hapro-reply-area{margin:20px 0;padding:20px;border:1px solid #6d5927;background:#18150e;border-radius:8px}
+.hapro-reply-area h4{color:#d4af37;margin-bottom:12px}
+.hapro-reply-content{white-space:pre-wrap;overflow-wrap:anywhere;color:#eee;padding:12px 0}
+.hapro-reply-badge{display:inline-block;margin-left:10px;font-size:11px;color:#bcbcbc;border:1px solid #666;border-radius:4px;padding:1px 5px;vertical-align:middle}
+.hapro-reply-badge.answered{color:#e6ca79;border-color:#a88738}
+#haproReplyButtons.hidden{display:none!important}
+@media(max-width:650px){.hapro-reply-badge{display:block;width:max-content;margin:5px 0 0}}
+</style>
 </head>
 <body>
 <header>
@@ -1055,6 +1064,22 @@ gtag('config', 'G-HGRY3V717M');
 </form><p id="guestStatus" class="status" role="status"></p>
 <div class="board-list" style="margin-top:20px"><div class="board-head"><span>NO.</span><span data-hapro-ko="제목" data-hapro-en="TITLE" data-hapro-ja="タイトル" data-hapro-zh="标题" data-hapro-ar="العنوان">제목</span><span data-hapro-ko="날짜" data-hapro-en="DATE" data-hapro-ja="日付" data-hapro-zh="日期" data-hapro-ar="التاريخ">날짜</span></div><div id="guestBoardList" aria-live="polite"></div></div>
 <div id="guestDetail" class="post-detail hidden"><h3 id="guestDetailTitle"></h3><p class="post-meta" id="guestDetailMeta"></p><div class="post-content" id="guestDetailContent"></div>
+<div id="haproReplyArea" class="hapro-reply-area">
+ <h4 id="haproReplyHeading">관리자 답변</h4>
+ <div id="haproReplyView" class="hapro-reply-content hidden"></div>
+ <p id="haproReplyEmpty" class="status">답변대기</p>
+ <div id="haproReplyButtons" class="hidden" style="display:flex;gap:8px;flex-wrap:wrap">
+  <button class="btn" id="haproReplyNew" type="button">관리자 답변 작성</button>
+  <button class="btn secondary hidden" id="haproReplyEdit" type="button">답변 수정</button>
+  <button class="btn danger hidden" id="haproReplyDelete" type="button">답변 삭제</button>
+ </div>
+ <div id="haproReplyEditor" class="hidden" style="margin-top:14px">
+  <textarea id="haproReplyContent" maxlength="10000" placeholder="답변을 입력하십시오."></textarea>
+  <button class="btn" id="haproReplySave" type="button">답변 저장</button>
+  <button class="btn secondary" id="haproReplyCancel" type="button">취소</button>
+ </div>
+ <p id="haproReplyStatus" class="status" role="status"></p>
+</div>
 <div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn secondary" id="guestEditBtn" data-hapro-ko="수정" data-hapro-en="EDIT" data-hapro-ja="編集" data-hapro-zh="编辑" data-hapro-ar="تعديل">수정</button><button type="button" class="btn danger" id="guestDeleteBtn" data-hapro-ko="삭제" data-hapro-en="DELETE" data-hapro-ja="削除" data-hapro-zh="删除" data-hapro-ar="حذف">삭제</button><button type="button" class="btn secondary" id="guestCloseBtn" data-hapro-ko="닫기" data-hapro-en="CLOSE" data-hapro-ja="閉じる" data-hapro-zh="关闭" data-hapro-ar="إغلاق">닫기</button></div>
 <form id="guestEditForm" class="stack hidden" style="margin-top:18px"><input id="guestEditTitle" required maxlength="100" placeholder="제목 / Title"><input id="guestEditAuthor" readonly maxlength="50" placeholder="작성자 (변경 불가) / Author (read only)"><textarea id="guestEditContent" required maxlength="10000" placeholder="내용 / Content"></textarea><input id="guestEditPassword" type="password" required placeholder="작성 시 비밀번호 / Post password"><button class="btn" type="submit">SAVE / 저장</button></form>
 <p class="status" id="guestDetailStatus" role="status"></p>
@@ -1878,24 +1903,80 @@ initialize();
 </script>
 <script id="hapro-visitor-board-2026">
 (function(){'use strict';
-const el=id=>document.getElementById(id); let items=[],selected=null;
+const el=id=>document.getElementById(id); let items=[],selected=null,replies=new Map(),openToken=0;
 const status=(id,msg,err=false)=>{el(id).textContent=msg;el(id).classList.toggle('error',err);};
 const rpc=async(name,args)=>{const {data,error}=await db.rpc(name,args);if(error)throw error;return data;};
 function errText(e){return e&&e.message?e.message:String(e);}
+const lang=()=>{const l=document.documentElement.lang;return l==='zh-CN'?'zh':(l||'ko');};
+const words={ko:['답변완료','답변대기','관리자 답변','관리자 답변 작성','답변을 입력하십시오.','답변 등록','답변 수정','답변 삭제','답변 저장','취소','관리자 로그인 후 답변을 작성할 수 있습니다.','답변을 삭제하시겠습니까?','답변이 저장되었습니다.','답변이 삭제되었습니다.','답변 처리 중...','답변 조회 실패: '],en:['Answered','Awaiting reply','Administrator reply','Write administrator reply','Enter your reply.','Publish reply','Edit reply','Delete reply','Save reply','Cancel','Sign in as administrator to reply.','Delete this reply?','Reply saved.','Reply deleted.','Processing reply...','Failed to load replies: '],ja:['回答済み','回答待ち','管理者の回答','管理者の回答を作成','回答を入力してください。','回答を登録','回答を編集','回答を削除','回答を保存','キャンセル','回答には管理者ログインが必要です。','この回答を削除しますか？','回答を保存しました。','回答を削除しました。','回答を処理中...','回答の読み込みに失敗: '],zh:['已回复','待回复','管理员回复','撰写管理员回复','请输入回复内容。','发布回复','编辑回复','删除回复','保存回复','取消','请先以管理员身份登录。','确定删除此回复吗？','回复已保存。','回复已删除。','正在处理回复...','加载回复失败: '],ar:['تم الرد','بانتظار الرد','رد المسؤول','كتابة رد المسؤول','يرجى إدخال الرد.','نشر الرد','تعديل الرد','حذف الرد','حفظ الرد','إلغاء','يرجى تسجيل الدخول كمسؤول للرد.','هل تريد حذف هذا الرد؟','تم حفظ الرد.','تم حذف الرد.','جارٍ معالجة الرد...','فشل تحميل الردود: ']};
+const t=i=>(words[lang()]||words.ko)[i];
+const replyArea=el('haproReplyArea'),replyView=el('haproReplyView'),replyEditor=el('haproReplyEditor'),replyContent=el('haproReplyContent'),replyStatus=el('haproReplyStatus');
+const replyButtons=el('haproReplyButtons');
+function renderReply(){
+ const reply=selected?replies.get(String(selected.id)):null;
+ el('haproReplyHeading').textContent=t(2);
+ replyView.textContent=reply?reply.content:'';
+ replyView.classList.toggle('hidden',!reply);
+ el('haproReplyEmpty').textContent=t(1);
+ el('haproReplyEmpty').classList.toggle('hidden',!!reply);
+ replyButtons.classList.toggle('hidden',!isAdmin());
+ el('haproReplyNew').classList.toggle('hidden',!!reply);
+ el('haproReplyNew').textContent=t(3);
+ el('haproReplyEdit').classList.toggle('hidden',!reply);
+ el('haproReplyEdit').textContent=t(6);
+ el('haproReplyDelete').classList.toggle('hidden',!reply);
+ el('haproReplyDelete').textContent=t(7);
+ el('haproReplySave').textContent=t(8);
+ el('haproReplyCancel').textContent=t(9);
+ replyContent.placeholder=t(4);
+}
+async function loadReplies(){
+ const {data,error}=await db.from('guest_board_replies').select('id,post_id,content,created_at,updated_at');
+ if(error)throw error;
+ replies=new Map((data||[]).map(r=>[String(r.post_id),r]));
+}
+function showReplyEditor(){if(!selected||!isAdmin())return;const r=replies.get(String(selected.id));replyContent.value=r?r.content:'';replyEditor.classList.remove('hidden');replyContent.focus();}
+el('haproReplyNew').addEventListener('click',showReplyEditor);
+el('haproReplyEdit').addEventListener('click',showReplyEditor);
+el('haproReplyCancel').addEventListener('click',()=>replyEditor.classList.add('hidden'));
+el('haproReplySave').addEventListener('click',async()=>{
+ if(!selected||!isAdmin())return;
+ const content=replyContent.value.trim();if(!content||content.length>10000){replyStatus.textContent=t(4);return;}
+ const id=selected.id,existing=replies.get(String(id));const button=el('haproReplySave');button.disabled=true;replyStatus.textContent=t(14);
+ try{
+  const result=existing?await db.from('guest_board_replies').update({content,updated_at:new Date().toISOString()}).eq('id',existing.id).select('id,post_id,content,created_at,updated_at').single():await db.from('guest_board_replies').insert({post_id:id,content}).select('id,post_id,content,created_at,updated_at').single();
+  if(result.error)throw result.error;
+  replies.set(String(id),result.data);replyEditor.classList.add('hidden');replyStatus.textContent=t(12);renderReply();renderRows();
+ }catch(e){replyStatus.textContent=errText(e);}finally{button.disabled=false;}
+});
+el('haproReplyDelete').addEventListener('click',async()=>{
+ if(!selected||!isAdmin())return;const r=replies.get(String(selected.id));if(!r||!confirm(t(11)))return;
+ replyStatus.textContent=t(14);
+ try{const {error}=await db.from('guest_board_replies').delete().eq('id',r.id);if(error)throw error;replies.delete(String(selected.id));replyEditor.classList.add('hidden');replyStatus.textContent=t(13);renderReply();renderRows();}catch(e){replyStatus.textContent=errText(e);}
+});
+function renderRows(){
+ const root=el('guestBoardList');root.replaceChildren();
+ if(!items.length){const empty=document.createElement('div');empty.className='post-row';empty.textContent='등록된 방문자 게시글이 없습니다.';root.append(empty);return;}
+ items.forEach((post,i)=>{const row=document.createElement('div');row.className='post-row';const num=document.createElement('span');num.textContent=String(items.length-i);const btn=document.createElement('button');btn.type='button';
+ const title=document.createElement('span');title.textContent=post.title;const badge=document.createElement('small');badge.textContent=replies.has(String(post.id))?t(0):t(1);badge.className='hapro-reply-badge'+(replies.has(String(post.id))?' answered':'');btn.append(title,badge);
+ btn.addEventListener('click',()=>open(post.id));const date=document.createElement('span');date.textContent=new Date(post.created_at).toLocaleDateString(document.documentElement.lang||'ko');row.append(num,btn,date);root.append(row);});
+}
 async function refresh(){
  try{
   const {data,error}=await db.from('guest_board_posts').select('id,title,author,content,created_at,updated_at').order('created_at',{ascending:false}).limit(100);
-  if(error)throw error;items=data||[];const root=el('guestBoardList');root.replaceChildren();
-  if(!items.length){const empty=document.createElement('div');empty.className='post-row';empty.textContent='등록된 방문자 게시글이 없습니다.';root.append(empty);return;}
-  items.forEach((post,i)=>{const row=document.createElement('div');row.className='post-row';const num=document.createElement('span');num.textContent=String(items.length-i);const btn=document.createElement('button');btn.type='button';btn.textContent=post.title;btn.addEventListener('click',()=>open(post.id));const date=document.createElement('span');date.textContent=new Date(post.created_at).toLocaleDateString(document.documentElement.lang||'ko');row.append(num,btn,date);root.append(row);});
+  if(error)throw error;items=data||[];
+  try{await loadReplies();}catch(replyError){status('guestStatus',t(15)+errText(replyError),true);}
+  renderRows();
+  if(selected){const still=items.find(p=>String(p.id)===String(selected.id));if(still){selected=still;renderReply();}else{selected=null;el('guestDetail').classList.add('hidden');}}
+
  }catch(e){status('guestStatus','방문자 게시판 조회 실패: '+errText(e),true);}
 }
-function open(id){selected=items.find(p=>String(p.id)===String(id));if(!selected)return;el('guestDetailTitle').textContent=selected.title;el('guestDetailMeta').textContent=selected.author+' | '+new Date(selected.created_at).toLocaleString(document.documentElement.lang||'ko');el('guestDetailContent').textContent=selected.content;el('guestDetail').classList.remove('hidden');el('guestEditForm').classList.add('hidden');status('guestDetailStatus','');}
+function open(id){selected=items.find(p=>String(p.id)===String(id));if(!selected)return;el('guestDetailTitle').textContent=selected.title;el('guestDetailMeta').textContent=selected.author+' | '+new Date(selected.created_at).toLocaleString(document.documentElement.lang||'ko');el('guestDetailContent').textContent=selected.content;el('guestDetail').classList.remove('hidden');el('guestEditForm').classList.add('hidden');status('guestDetailStatus','');replyStatus.textContent='';replyEditor.classList.add('hidden');renderReply();}
 el('guestCreateForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;const btn=form.querySelector('button[type=submit]');btn.disabled=true;try{
  const password=el('guestPassword').value;if(password.length<8)throw Error('비밀번호는 8자 이상이어야 합니다.');
  await rpc('guest_post_create',{p_title:el('guestTitle').value.trim(),p_author:el('guestAuthor').value.trim(),p_content:el('guestContent').value.trim(),p_password:password});form.reset();status('guestStatus','방문자 게시글이 등록되었습니다.');await refresh();
  }catch(err){status('guestStatus','등록 실패: '+errText(err),true);}finally{btn.disabled=false;}});
-el('guestCloseBtn').addEventListener('click',()=>{selected=null;el('guestDetail').classList.add('hidden');});
+el('guestCloseBtn').addEventListener('click',()=>{selected=null;el('guestDetail').classList.add('hidden');replyEditor.classList.add('hidden');});
 el('guestEditBtn').addEventListener('click',()=>{if(!selected)return;el('guestEditTitle').value=selected.title;el('guestEditAuthor').value=selected.author;el('guestEditContent').value=selected.content;el('guestEditPassword').value='';el('guestEditForm').classList.remove('hidden');});
 el('guestEditForm').addEventListener('submit',async e=>{e.preventDefault();if(!selected)return;const btn=e.currentTarget.querySelector('button[type=submit]');btn.disabled=true;const id=selected.id;try{
  const updated=await rpc('guest_post_update',{p_id:id,p_password:el('guestEditPassword').value,p_title:el('guestEditTitle').value.trim(),p_content:el('guestEditContent').value.trim()});if(updated!==true)throw Error('비밀번호가 일치하지 않거나 게시글을 찾을 수 없습니다.');
@@ -1903,6 +1984,9 @@ el('guestEditForm').addEventListener('submit',async e=>{e.preventDefault();if(!s
  status('guestDetailStatus','수정되었습니다.');await refresh();open(id);
  }catch(err){status('guestDetailStatus','수정 실패: '+errText(err),true);}finally{btn.disabled=false;}});
 el('guestDeleteBtn').addEventListener('click',async()=>{if(!selected)return;const password=window.prompt('게시글 비밀번호를 입력하세요. / Enter post password');if(password===null)return;if(!window.confirm('게시글을 삭제하시겠습니까?'))return;try{const deleted=await rpc('guest_post_delete',{p_id:selected.id,p_password:password});if(deleted!==true)throw Error('비밀번호가 일치하지 않거나 게시글을 찾을 수 없습니다.');selected=null;el('guestDetail').classList.add('hidden');status('guestStatus','삭제되었습니다.');await refresh();}catch(err){status('guestDetailStatus','삭제 실패: '+errText(err),true);}});
+db.auth.onAuthStateChange(()=>{setTimeout(()=>{if(selected)renderReply();},0);});
+const observer=new MutationObserver(()=>{if(selected)renderReply();renderRows();});
+const languageButtons=document.querySelectorAll('[data-hapro-lang]');languageButtons.forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{if(selected)renderReply();renderRows();},0)));
 refresh();
 })();
 </script>
