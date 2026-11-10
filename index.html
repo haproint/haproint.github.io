@@ -967,6 +967,36 @@ gtag('config', 'G-HGRY3V717M');
   }
 }
 </style>
+
+<style id="hapro-business-images-pc-mobile-final-20261110">
+/* Final override: identical BUSINESS PORTFOLIO photo sizing on desktop and mobile.
+   Override earlier conflicting object-fit:contain and intrinsic aspect-ratio rules. */
+#business .cards > .portfolio-photo-card > img.category-visual,
+#business .cards > .portfolio-photo-card > img.real-photo {
+  display:block !important;
+  box-sizing:border-box !important;
+  width:100% !important;
+  max-width:100% !important;
+  height:clamp(220px, 27vw, 365px) !important;
+  min-height:0 !important;
+  max-height:none !important;
+  aspect-ratio:16 / 10 !important;
+  object-fit:cover !important;
+  object-position:center center !important;
+  margin:0 !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:#151515 !important;
+}
+@media(max-width:700px) {
+  #business .cards > .portfolio-photo-card > img.category-visual,
+  #business .cards > .portfolio-photo-card > img.real-photo {
+    height:56.25vw !important;
+    aspect-ratio:16 / 10 !important;
+  }
+}
+</style>
 </head>
 <body>
 <header>
