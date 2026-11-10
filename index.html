@@ -913,12 +913,45 @@ gtag('config', 'G-HGRY3V717M');
 #haproReplyButtons.hidden{display:none!important}
 @media(max-width:650px){.hapro-reply-badge{display:block;width:max-content;margin:5px 0 0}}
 </style>
+
+<style id="hapro-mobile-layout-20261110">
+/* Mobile-only adjustments; desktop layout and application integrations remain unchanged. */
+@media (max-width: 767px) {
+  html { scroll-padding-top: 100px; }
+  header .nav { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:8px 10px; padding:11px 0 12px; min-height:0; }
+  header .logo { font-size:clamp(19px,5.6vw,25px); letter-spacing:2.5px; line-height:1.4; }
+  header .hapro-menu-toggle { display:inline-flex; align-items:center; justify-content:center; gap:7px; min-height:40px; padding:7px 12px; border:1px solid #665323; border-radius:7px; background:#16130d; color:#e2c66f; font-size:13px; font-weight:700; line-height:1.2; }
+  header nav[aria-label="주요 메뉴"] { display:none; grid-column:1 / -1; flex-direction:column; flex-wrap:nowrap; align-items:stretch; gap:0; width:100%; max-height:min(58vh,430px); overflow-y:auto; padding:6px 0; border-top:1px solid #3e351d; border-bottom:1px solid #3e351d; }
+  header nav[aria-label="주요 메뉴"].hapro-menu-open { display:flex; }
+  header nav[aria-label="주요 메뉴"] a { display:block; width:100%; padding:9px 12px; font-size:12px; letter-spacing:.7px; white-space:normal; text-align:start; }
+  header .hapro-lang-switch { grid-column:1 / -1; justify-self:center; margin:1px auto 0; padding:3px; gap:1px; flex-wrap:nowrap; max-width:100%; }
+  header .hapro-lang-button { padding:7px clamp(7px,2.3vw,11px); font-size:12px; }
+  section { padding:44px 0; scroll-margin-top:110px; }
+  .hero { min-height:0; height:auto; padding:49px 0 53px; align-items:center; }
+  .hero .wrap { width:90%; }
+  .hero h1 { font-size:clamp(36px,9vw,46px); line-height:1.18; letter-spacing:1.5px; overflow-wrap:normal; }
+  .hero h2 { font-size:clamp(16px,4.5vw,21px); line-height:1.55; letter-spacing:1.5px; margin-top:12px; }
+  .hero p { margin-top:18px; font-size:clamp(14px,3.7vw,16px); line-height:1.75; }
+  .hero .label { font-size:10px; letter-spacing:1.5px; line-height:1.5; }
+  .title { font-size:clamp(26px,7vw,33px); line-height:1.3; }
+  .ko-title { margin-bottom:17px; }
+  .cards { margin-top:22px; gap:16px; }
+  .card,.panel { padding:20px; }
+  .twocol,.board-layout { margin-top:22px; }
+  .global h2 { margin:14px 0; }
+  .main-img { margin-top:22px; }
+  .kfood-more { margin:30px 0 24px; }
+  .ramen-gallery-intro { margin:25px 0 16px; }
+}
+@media (min-width:768px) { header .hapro-menu-toggle { display:none !important; } }
+</style>
 </head>
 <body>
 <header>
 <div class="wrap nav">
 <a class="logo" href="#home">HAPRO <span>INT.</span></a>
-<nav aria-label="주요 메뉴">
+<button class="hapro-menu-toggle" type="button" aria-controls="hapro-primary-nav" aria-expanded="false" aria-label="메뉴 열기">☰ <span>MENU</span></button>
+<nav id="hapro-primary-nav" aria-label="주요 메뉴">
 <a href="#home">HOME</a><a href="#about">ABOUT</a><a data-hapro-ar="النشاط التجاري" data-hapro-en="BUSINESS" data-hapro-ja="BUSINESS" data-hapro-ko="BUSINESS" data-hapro-zh="BUSINESS" href="#business">BUSINESS</a>
 <a data-hapro-ar="المنتجات الغذائية الكورية" data-hapro-en="K-FOOD" data-hapro-ja="K-FOOD" data-hapro-ko="K-FOOD" data-hapro-zh="K-FOOD" href="#kfood">K-FOOD</a><a href="#halal-certificates"><span data-hapro-ar="شهادات الحلال" data-hapro-en="HALAL CERTIFICATES" data-hapro-ja="ハラール認証書" data-hapro-ko="할랄 인증서" data-hapro-zh="清真认证证书">할랄 인증서</span></a><a data-hapro-ar="منتجات التجميل الكورية" data-hapro-en="K-BEAUTY" data-hapro-ja="K-BEAUTY" data-hapro-ko="K-BEAUTY" data-hapro-zh="K-BEAUTY" href="#kbeauty">K-BEAUTY</a><a href="#produce">PRODUCE</a>
 <a href="#wellness">WELLNESS</a><a href="#lifestyle">LIFESTYLE</a><a href="#global">GLOBAL</a>
@@ -2189,6 +2222,26 @@ window.addEventListener('pageshow',apply);
   document.getElementById("contact").scrollIntoView({behavior:"smooth",block:"start"});
   contactSubject.focus({preventScroll:true});
  });
+})();
+</script>
+
+<script id="hapro-mobile-menu-20261110">
+(function(){
+  'use strict';
+  var toggle=document.querySelector('header .hapro-menu-toggle');
+  var menu=document.getElementById('hapro-primary-nav');
+  if(!toggle || !menu) return;
+  function setOpen(open){
+    menu.classList.toggle('hapro-menu-open',open);
+    toggle.setAttribute('aria-expanded',String(open));
+    toggle.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');
+    var span=toggle.querySelector('span');
+    if(span) span.textContent=open?'CLOSE':'MENU';
+  }
+  toggle.addEventListener('click',function(){setOpen(toggle.getAttribute('aria-expanded')!=='true');});
+  menu.addEventListener('click',function(e){if(e.target.closest('a')) setOpen(false);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape') setOpen(false);});
+  window.addEventListener('resize',function(){if(window.innerWidth>=768) setOpen(false);});
 })();
 </script>
 </body>
