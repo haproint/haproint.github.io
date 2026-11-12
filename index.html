@@ -997,6 +997,13 @@ gtag('config', 'G-HGRY3V717M');
   }
 }
 </style>
+<style id="hapro-board-photo-style">
+.hapro-photo-field{display:flex;flex-direction:column;gap:6px;margin:12px 0;color:#ddd;font-size:13px}
+.hapro-photo-field input[type=file]{max-width:100%;padding:10px}
+.hapro-photo-hint{color:#aaa;font-size:12px}
+.hapro-post-photo{display:block;max-width:100%;max-height:680px;object-fit:contain;margin:18px auto;border-radius:7px}
+.hapro-photo-state{color:#c9b16a;font-size:12px;margin:8px 0;white-space:pre-wrap}
+</style>
 </head>
 <body>
 <header>
@@ -1650,14 +1657,16 @@ function openPost(id) {
     new Date(currentPost.created_at).toLocaleString("ko-KR");
 
   $("detailContent").textContent = currentPost.content;
+  window.currentPostForPhoto=currentPost.id;
+  document.getElementById('haproAdminExistingPhotoStatus').textContent='';
+  document.getElementById('haproAdminExistingPhoto').value='';
+  window.haproBoardPhoto.showPhoto('admin',currentPost.id,document.getElementById('haproAdminPhotoView'));
 
   show("postDetail");
   hide("editPostBox");
 
-  $("adminPostActions").classList.toggle(
-    "hidden",
-    !isAdmin()
-  );
+  $("adminPostActions").classList.toggle("hidden",!isAdmin());
+  document.getElementById('haproAdminExistingPhotoBox').classList.toggle('hidden',!isAdmin());
 
   $("postDetail").scrollIntoView({
     behavior:"smooth",
@@ -1691,24 +1700,25 @@ $("createPostForm").addEventListener("submit",async e => {
     return;
   }
 
-  const {error} = await db.from("board_posts").insert({
-    title,
-    author,
-    content
-  });
-
-  if (error) {
-    setStatus("postStatus",error.message,"error");
-    return;
+  const photo = document.getElementById("haproAdminNewPhoto")?.files[0];
+  const insertQuery = db.from("board_posts").insert({title,author,content});
+  const {data:created,error} = photo
+    ? await insertQuery.select("id").single()
+    : await insertQuery;
+  if (error) {setStatus("postStatus",error.message,"error");return;}
+  let photoWarning="";
+  if(photo){
+    setStatus("postStatus","게시글 등록 완료. 사진 업로드 중...");
+    try{await window.haproBoardPhoto.upload("admin",created.id,photo);}
+    catch(e){photoWarning=" 사진 업로드 실패: "+e.message+" (게시글은 등록됨)";}
   }
-
   $("createPostForm").reset();
   $("postAuthor").value = "HAPRO INT.";
 
   setStatus(
     "postStatus",
-    "게시글이 등록되었습니다.",
-    "success"
+    "게시글이 등록되었습니다."+photoWarning,
+    photoWarning?"error":"success"
   );
 
   await loadPosts();
@@ -1986,6 +1996,78 @@ async function initialize() {
 initialize();
 
 </script>
+<script id="hapro-board-photo-integration">
+(function(){'use strict';
+const BASE='https://hjlvhsfyifntcvmpaocq.supabase.co/functions/v1/';
+const lang=()=>((document.documentElement.lang||'ko').split('-')[0]);
+const dictionary={
+ ko:['사진 첨부 (선택, JPG·PNG·WEBP, 5MB 이하)','게시글 등록 후 사진이 업로드됩니다. 게시글당 사진 1장.','사진 첨부','사진 업로드 중...','사진이 등록되었습니다.','사진 업로드 실패: ','사진 불러오기 실패: ','사진을 선택하세요.','이미 사진이 등록된 게시글입니다.'],
+ en:['Attach photo (optional, JPG/PNG/WEBP, max 5 MB)','Photo uploads after the post is created. One photo per post.','Attach photo','Uploading photo...','Photo uploaded.','Photo upload failed: ','Could not load photo: ','Select a photo.','This post already has a photo.'],
+ ja:['写真を添付（任意、JPG・PNG・WEBP、5MB以下）','投稿作成後にアップロードします。1投稿につき1枚。','写真を添付','写真をアップロード中…','写真を登録しました。','写真アップロード失敗: ','写真表示失敗: ','写真を選択してください。','写真は既に添付されています。'],
+ zh:['附加照片（可选，JPG/PNG/WEBP，最大5MB）','帖子创建后上传。每篇限一张。','附加照片','正在上传照片…','照片已上传。','照片上传失败：','无法显示照片：','请选择照片。','该帖子已有照片。'],
+ ar:['إرفاق صورة (اختياري، JPG/PNG/WEBP، بحد أقصى 5 ميغابايت)','تُرفع الصورة بعد إنشاء المنشور. صورة واحدة لكل منشور.','إرفاق صورة','جارٍ رفع الصورة…','تم رفع الصورة.','فشل رفع الصورة: ','تعذر عرض الصورة: ','اختر صورة.','توجد صورة مرفقة بالفعل.']};
+const t=i=>(dictionary[lang()]||dictionary.ko)[i];
+function field(id,parent,position='beforeend'){
+ const wrap=document.createElement('label');wrap.className='hapro-photo-field';wrap.id=id+'Wrap';
+ const label=document.createElement('span');label.textContent=t(0);label.dataset.photoLabel='1';
+ const input=document.createElement('input');input.type='file';input.id=id;input.accept='image/jpeg,image/png,image/webp';
+ const hint=document.createElement('small');hint.className='hapro-photo-hint';hint.textContent=t(1);hint.dataset.photoHint='1';
+ wrap.append(label,input,hint);parent.insertAdjacentElement(position,wrap);return input;
+}
+function state(id,parent){const el=document.createElement('p');el.id=id;el.className='hapro-photo-state';parent.append(el);return el;}
+function validate(file){if(!file)return;if(file.size===0||file.size>5*1024*1024)throw Error('5MB maximum');if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('JPG, PNG, WEBP only');}
+async function upload(board,id,file,password){
+ if(!file)return null;validate(file);
+ const form=new FormData();form.append('file',file);form.append('board',board);form.append('post_id',String(id));
+ if(board==='guest')form.append('password',password);
+ const headers={};if(board==='admin'){
+  const {data,error}=await db.auth.getSession();if(error||!data.session?.access_token)throw Error('Administrator login required');
+  headers.Authorization='Bearer '+data.session.access_token;
+ }
+ const response=await fetch(BASE+'board-image-upload',{method:'POST',headers,body:form});
+ let payload={};try{payload=await response.json();}catch{}
+ if(!response.ok||payload.success!==true)throw Error(payload.error||'HTTP '+response.status);
+ return payload;
+}
+const viewTokens=new WeakMap();
+async function showPhoto(board,id,container){
+ if(!container)return;const token={};viewTokens.set(container,token);container.replaceChildren();
+ try{
+  const response=await fetch(BASE+'board-image-view',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({board,post_id:Number(id)})});
+  let payload={};try{payload=await response.json();}catch{}
+  if(viewTokens.get(container)!==token)return;
+  if(response.status===404||response.status===204)return;
+  if(!response.ok||!payload.signed_url){const msg=document.createElement('p');msg.className='hapro-photo-state';msg.textContent=t(6)+(payload.error||'HTTP '+response.status);container.append(msg);return;}
+  const img=document.createElement('img');img.className='hapro-post-photo';img.alt=t(2);img.loading='lazy';img.referrerPolicy='no-referrer';img.src=payload.signed_url;container.append(img);
+ }catch(err){if(viewTokens.get(container)===token){const msg=document.createElement('p');msg.className='hapro-photo-state';msg.textContent=t(6)+err.message;container.append(msg);}}
+}
+function init(){
+ const guestForm=document.getElementById('guestCreateForm');const adminForm=document.getElementById('createPostForm');
+ const guestDetail=document.getElementById('guestDetail');const adminDetail=document.getElementById('postDetail');
+ const guestEdit=document.getElementById('guestEditForm');
+ if(!guestForm||!adminForm||!guestDetail||!adminDetail||!guestEdit)return;
+ field('haproGuestNewPhoto',guestForm,'beforeend');state('haproGuestPhotoStatus',guestForm);
+ field('haproAdminNewPhoto',adminForm,'beforeend');state('haproAdminPhotoStatus',adminForm);
+ const guestPhoto=document.createElement('div');guestPhoto.id='haproGuestPhotoView';document.getElementById('guestDetailContent').insertAdjacentElement('afterend',guestPhoto);
+ const adminPhoto=document.createElement('div');adminPhoto.id='haproAdminPhotoView';document.getElementById('detailContent').insertAdjacentElement('afterend',adminPhoto);
+ const guestEditField=field('haproGuestEditPhoto',guestEdit,'beforeend');state('haproGuestEditPhotoStatus',guestEdit);
+ const adminAttach=document.createElement('div');adminAttach.id='haproAdminExistingPhotoBox';adminAttach.className='stack';
+ field('haproAdminExistingPhoto',adminAttach);
+ const attachBtn=document.createElement('button');attachBtn.type='button';attachBtn.className='btn secondary';attachBtn.textContent=t(2);attachBtn.dataset.photoButton='1';adminAttach.append(attachBtn);
+ const attachStatus=state('haproAdminExistingPhotoStatus',adminAttach);
+ adminDetail.append(adminAttach);
+ attachBtn.addEventListener('click',async()=>{if(!window.currentPostForPhoto)return;const file=document.getElementById('haproAdminExistingPhoto').files[0];if(!file){attachStatus.textContent=t(7);return;}attachBtn.disabled=true;attachStatus.textContent=t(3);try{await upload('admin',window.currentPostForPhoto,file);attachStatus.textContent=t(4);document.getElementById('haproAdminExistingPhoto').value='';showPhoto('admin',window.currentPostForPhoto,adminPhoto);}catch(e){attachStatus.textContent=t(5)+e.message;}finally{attachBtn.disabled=false;}});
+ const originalGuestEdit=guestEdit.querySelector('button[type=submit]');
+ const guestEditAttach=document.createElement('button');guestEditAttach.type='button';guestEditAttach.className='btn secondary';guestEditAttach.textContent=t(2);guestEditAttach.dataset.photoButton='1';originalGuestEdit.insertAdjacentElement('afterend',guestEditAttach);
+ guestEditAttach.addEventListener('click',async()=>{const id=window.currentGuestPostForPhoto;const file=guestEditField.files[0];const pass=document.getElementById('guestEditPassword').value;if(!id||!file){document.getElementById('haproGuestEditPhotoStatus').textContent=t(7);return;}guestEditAttach.disabled=true;const el=document.getElementById('haproGuestEditPhotoStatus');el.textContent=t(3);try{await upload('guest',id,file,pass);el.textContent=t(4);guestEditField.value='';showPhoto('guest',id,guestPhoto);}catch(e){el.textContent=t(5)+e.message;}finally{guestEditAttach.disabled=false;}});
+ window.haproBoardPhoto={upload,showPhoto,t};
+ document.querySelectorAll('[data-hapro-lang]').forEach(b=>b.addEventListener('click',()=>setTimeout(()=>{
+  document.querySelectorAll('[data-photo-label]').forEach(n=>n.textContent=t(0));document.querySelectorAll('[data-photo-hint]').forEach(n=>n.textContent=t(1));document.querySelectorAll('[data-photo-button]').forEach(n=>n.textContent=t(2));
+ },0)));
+}
+init();
+})();
+</script>
 <script id="hapro-visitor-board-2026">
 (function(){'use strict';
 const el=id=>document.getElementById(id); let items=[],selected=null,replies=new Map(),openToken=0;
@@ -2056,10 +2138,13 @@ async function refresh(){
 
  }catch(e){status('guestStatus','방문자 게시판 조회 실패: '+errText(e),true);}
 }
-function open(id){selected=items.find(p=>String(p.id)===String(id));if(!selected)return;el('guestDetailTitle').textContent=selected.title;el('guestDetailMeta').textContent=selected.author+' | '+new Date(selected.created_at).toLocaleString(document.documentElement.lang||'ko');el('guestDetailContent').textContent=selected.content;el('guestDetail').classList.remove('hidden');el('guestEditForm').classList.add('hidden');status('guestDetailStatus','');replyStatus.textContent='';replyEditor.classList.add('hidden');renderReply();}
+function open(id){selected=items.find(p=>String(p.id)===String(id));if(!selected)return;el('guestDetailTitle').textContent=selected.title;el('guestDetailMeta').textContent=selected.author+' | '+new Date(selected.created_at).toLocaleString(document.documentElement.lang||'ko');el('guestDetailContent').textContent=selected.content;window.currentGuestPostForPhoto=selected.id;window.haproBoardPhoto.showPhoto('guest',selected.id,el('haproGuestPhotoView'));el('guestDetail').classList.remove('hidden');el('guestEditForm').classList.add('hidden');status('guestDetailStatus','');replyStatus.textContent='';replyEditor.classList.add('hidden');renderReply();}
 el('guestCreateForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget;const btn=form.querySelector('button[type=submit]');btn.disabled=true;try{
  const password=el('guestPassword').value;if(password.length<8)throw Error('비밀번호는 8자 이상이어야 합니다.');
- await rpc('guest_post_create',{p_title:el('guestTitle').value.trim(),p_author:el('guestAuthor').value.trim(),p_content:el('guestContent').value.trim(),p_password:password});form.reset();status('guestStatus','방문자 게시글이 등록되었습니다.');await refresh();
+ const photo=el('haproGuestNewPhoto').files[0];
+ const newId=await rpc('guest_post_create',{p_title:el('guestTitle').value.trim(),p_author:el('guestAuthor').value.trim(),p_content:el('guestContent').value.trim(),p_password:password});
+ let warning='';if(photo){status('guestStatus','게시글 등록 완료. 사진 업로드 중...');try{await window.haproBoardPhoto.upload('guest',newId,photo,password);}catch(e){warning=' 사진 업로드 실패: '+errText(e)+' (게시글은 등록됨)';}}
+ form.reset();status('guestStatus','방문자 게시글이 등록되었습니다.'+warning,!!warning);await refresh();
  }catch(err){status('guestStatus','등록 실패: '+errText(err),true);}finally{btn.disabled=false;}});
 el('guestCloseBtn').addEventListener('click',()=>{selected=null;el('guestDetail').classList.add('hidden');replyEditor.classList.add('hidden');});
 el('guestEditBtn').addEventListener('click',()=>{if(!selected)return;el('guestEditTitle').value=selected.title;el('guestEditAuthor').value=selected.author;el('guestEditContent').value=selected.content;el('guestEditPassword').value='';el('guestEditForm').classList.remove('hidden');});
