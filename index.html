@@ -2031,15 +2031,28 @@ async function upload(board,id,file,password){
 }
 const viewTokens=new WeakMap();
 async function showPhoto(board,id,container){
- if(!container)return;const token={};viewTokens.set(container,token);container.replaceChildren();
+ if(!container)return;
+ const token={};viewTokens.set(container,token);container.replaceChildren();
+ const note=(message)=>{const el=document.createElement('p');el.className='hapro-photo-state';el.textContent=message;container.append(el);};
  try{
-  const response=await fetch(BASE+'board-image-view',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({board,post_id:Number(id)})});
-  let payload={};try{payload=await response.json();}catch{}
+  const response=await fetch(BASE+'board-image-view',{
+   method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({board,post_id:Number(id)})
+  });
+  const raw=await response.text();let payload={};
+  try{payload=raw?JSON.parse(raw):{};}catch{throw Error('Invalid JSON (HTTP '+response.status+')');}
   if(viewTokens.get(container)!==token)return;
-  if(response.status===404||response.status===204)return;
-  if(!response.ok||!payload.signed_url){const msg=document.createElement('p');msg.className='hapro-photo-state';msg.textContent=t(6)+(payload.error||'HTTP '+response.status);container.append(msg);return;}
-  const img=document.createElement('img');img.className='hapro-post-photo';img.alt=t(2);img.loading='lazy';img.referrerPolicy='no-referrer';img.src=payload.signed_url;container.append(img);
- }catch(err){if(viewTokens.get(container)===token){const msg=document.createElement('p');msg.className='hapro-photo-state';msg.textContent=t(6)+err.message;container.append(msg);}}
+  const signedUrl=payload.signed_url||payload.signedUrl||payload.url||payload.signedURL||payload.data?.signed_url||payload.data?.signedUrl||payload.data?.url;
+  if(response.status===404||response.status===204){
+   note('첨부 사진 조회 결과가 없습니다. (HTTP '+response.status+', 게시글 '+id+')');return;
+  }
+  if(!response.ok){note(t(6)+(payload.error||payload.message||'HTTP '+response.status));return;}
+  if(!signedUrl){note('사진 조회 응답에 사진 주소가 없습니다. (게시글 '+id+', 응답: '+Object.keys(payload).join(', ')+')');return;}
+  const img=document.createElement('img');img.className='hapro-post-photo';img.alt=t(2);
+  img.loading='eager';img.referrerPolicy='no-referrer';
+  img.onerror=()=>{if(viewTokens.get(container)===token)note('사진 주소는 받았지만 이미지 로딩에 실패했습니다. (게시글 '+id+')');};
+  img.src=signedUrl;container.append(img);
+ }catch(err){if(viewTokens.get(container)===token)note(t(6)+err.message);}
 }
 function init(){
  const guestForm=document.getElementById('guestCreateForm');const adminForm=document.getElementById('createPostForm');
