@@ -357,6 +357,18 @@ nav a {font-size:10px;white-space:nowrap}
  border-radius:9px !important;filter:none !important;
 }
 @media(max-width:650px){#global .wrap > img.section-visual{aspect-ratio:1.65 / 1 !important;margin:18px auto 24px !important;}}
+
+/* BOARD column alignment and full-width empty state (2026-11-12) */
+.board-head,.post-row {box-sizing:border-box;grid-template-columns:60px minmax(0,1fr) 120px;column-gap:12px;}
+.board-head > *, .post-row > * {min-width:0;}
+.board-head > :last-child,.post-row > :last-child {white-space:nowrap;}
+.board-empty-row {display:flex;justify-content:center;text-align:center;align-items:center;min-height:62px;white-space:normal;word-break:keep-all;padding:16px 12px;}
+@media(max-width:600px){
+  .board-head,.post-row {grid-template-columns:38px minmax(0,1fr) 88px;gap:8px;padding:12px 10px;}
+  .board-head {font-size:11px;letter-spacing:0;}
+  .post-row {font-size:12px;}
+  .board-empty-row {display:flex; padding:16px 10px; font-size:12px;}
+}
 </style>
 <script async="" defer="" src="https://challenges.cloudflare.com/turnstile/v0/api.js">
 </script>
@@ -2136,7 +2148,7 @@ el('haproReplyDelete').addEventListener('click',async()=>{
 });
 function renderRows(){
  const root=el('guestBoardList');root.replaceChildren();
- if(!items.length){const empty=document.createElement('div');empty.className='post-row';empty.textContent='등록된 방문자 게시글이 없습니다.';root.append(empty);return;}
+ if(!items.length){const empty=document.createElement('div');empty.className='post-row board-empty-row';empty.textContent='등록된 방문자 게시글이 없습니다.';root.append(empty);return;}
  items.forEach((post,i)=>{const row=document.createElement('div');row.className='post-row';const num=document.createElement('span');num.textContent=String(items.length-i);const btn=document.createElement('button');btn.type='button';
  const title=document.createElement('span');title.textContent=post.title;const badge=document.createElement('small');badge.textContent=replies.has(String(post.id))?t(0):t(1);badge.className='hapro-reply-badge'+(replies.has(String(post.id))?' answered':'');btn.append(title,badge);
  btn.addEventListener('click',()=>open(post.id));const date=document.createElement('span');date.textContent=new Date(post.created_at).toLocaleDateString(document.documentElement.lang||'ko');row.append(num,btn,date);root.append(row);});
