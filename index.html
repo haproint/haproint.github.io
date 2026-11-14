@@ -926,6 +926,22 @@ body section .wrap .meal-figure > .hapro-banner-media::after {
 }
 
 </style>
+
+<style id="hapro-final-responsive-media-20261115">
+/* Unified desktop/mobile card geometry; preserve full source images. */
+:root{--hapro-gallery-gap:18px;--hapro-card-pad:20px}
+body section .wrap .hapro-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:18px!important;align-items:stretch!important}
+body section .wrap .hapro-photo-grid>.hapro-photo-card{min-width:0!important;max-width:100%!important;border:0!important;box-shadow:none!important;overflow:hidden!important}
+body section .wrap .hapro-photo-card .hapro-media{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;aspect-ratio:16/9!important;height:auto!important;overflow:hidden!important;padding:0!important;margin:0!important;border:0!important;background:#111!important}
+body section .wrap .hapro-photo-card .hapro-media>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;padding:0!important;margin:0!important;border:0!important;filter:none!important;transform:none!important}
+body section .wrap .hapro-photo-card .hapro-pack-media{background:#f5f5f3!important}
+body section .wrap .hapro-photo-card .hapro-pack-media>img{background:transparent!important;padding:0!important;object-fit:contain!important}
+body section .wrap .hapro-photo-card>.hapro-copy{box-sizing:border-box!important;width:100%!important;min-width:0!important;padding:20px!important;gap:10px!important;justify-content:flex-start!important}
+body section .wrap .hapro-copy>:is(h3,h4,strong,p,a,span){min-height:0!important;margin:0!important;text-indent:0!important;overflow-wrap:break-word!important;word-break:keep-all!important;text-align:start!important}
+body section .wrap .hapro-banner-media,body section .wrap .meal-figure>.hapro-banner-media{display:block!important;max-width:100%!important;width:100%!important;height:auto!important;object-fit:contain!important;object-position:center!important;padding:0!important;border:0!important;margin-inline:auto!important}
+body section .wrap img.section-visual,body section .wrap img.main-img{display:block!important;max-width:100%!important;width:100%!important;height:auto!important;object-fit:contain!important;margin-inline:auto!important;padding:0!important;border:0!important}
+@media(max-width:700px){body section .wrap .hapro-photo-grid{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}body section .wrap .hapro-photo-grid>.hapro-photo-card:last-child:nth-child(odd){grid-column:auto!important;width:100%!important;justify-self:stretch!important}body section .wrap .hapro-photo-card>.hapro-copy{padding:18px!important}body section .wrap .hapro-photo-card .hapro-media{aspect-ratio:16/9!important}}
+</style>
 </head>
 <body>
 <header>
@@ -2317,7 +2333,7 @@ window.addEventListener('pageshow',apply);
         for(let i=0;i<slots;i++){
           const elements=copies.map(c=>c.children[i]).filter(Boolean);
           const height=Math.max(...elements.map(el=>el.getBoundingClientRect().height));
-          elements.forEach(el=>{el.style.minHeight=height+'px';});
+          /* Natural text height: avoid artificial whitespace. */
         }
       });
     });
