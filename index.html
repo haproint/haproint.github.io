@@ -744,6 +744,188 @@ html[lang="ko"] .hero p,html[lang="ko"] #about .desc{word-break:keep-all;overflo
  body section .wrap .hapro-copy > p{font-size:14px!important;line-height:1.8!important;}
 }
 </style>
+<style>
+
+/* HAPRO UNIFIED IMAGE SIZE REPAIR | 2026-11-15
+   One 16:9 image viewport on desktop and mobile; no blurred backgrounds,
+   no letterboxing, no artificial side frames; consistent cards and text. */
+:root {
+  --hapro-gallery-gap: 24px;
+  --hapro-card-pad: 22px;
+  --hapro-media-ratio: 16 / 9;
+}
+body section .wrap .hapro-photo-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: var(--hapro-gallery-gap) !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 30px 0 0 !important;
+}
+body section .wrap .hapro-photo-grid > .hapro-photo-card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  grid-column: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  background: #111 !important;
+  box-shadow: none !important;
+}
+body section .wrap .hapro-photo-card > .hapro-media,
+body section .wrap .hapro-photo-card .hapro-media {
+  display: block !important;
+  position: relative !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: 16 / 9 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: #111 !important;
+  isolation: isolate !important;
+}
+body section .wrap .hapro-photo-card .hapro-media > img {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  transform: none !important;
+  filter: none !important;
+  background: transparent !important;
+}
+body section .wrap .hapro-photo-card .hapro-media::before,
+body section .wrap .hapro-photo-card .hapro-media::after {
+  display: none !important;
+  content: none !important;
+}
+/* Product packaging is intentionally displayed in full against a neutral backdrop. */
+body section .wrap .hapro-photo-card .hapro-pack-media,
+body section .wrap .hapro-pack-media {
+  background: #f5f5f3 !important;
+}
+body section .wrap .hapro-photo-card .hapro-pack-media > img,
+body section .wrap .hapro-pack-media > img {
+  object-fit: contain !important;
+  padding: 12px !important;
+  background: #f5f5f3 !important;
+}
+/* Keep the full water-treatment facility as the focal point in portrait-source photographs. */
+#future .hapro-photo-card:last-child .hapro-media > img {object-position: center 63% !important;}
+/* Matching text areas, without variable empty top margins. */
+body section .wrap .hapro-photo-card > .hapro-copy {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  gap: 11px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: var(--hapro-card-pad) !important;
+  margin: 0 !important;
+  text-align: start !important;
+}
+body section .wrap .hapro-photo-card .hapro-copy > * {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  text-align: start !important;
+}
+/* Section-wide hero photos should not overwhelm the two-column product cards. */
+body section .wrap > .hapro-banner-media,
+body section .wrap .meal-figure > .hapro-banner-media {
+  display: block !important;
+  position: relative !important;
+  width: min(100%, 840px) !important;
+  max-width: 840px !important;
+  height: auto !important;
+  max-height: none !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  margin: 28px auto !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  background: #111 !important;
+}
+body section .wrap > .hapro-banner-media > img,
+body section .wrap .meal-figure > .hapro-banner-media > img {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  object-fit: cover !important;
+  object-position: center center !important;
+  filter: none !important;
+  transform: none !important;
+  background: transparent !important;
+}
+body section .wrap > .hapro-banner-media::before,
+body section .wrap > .hapro-banner-media::after,
+body section .wrap .meal-figure > .hapro-banner-media::before,
+body section .wrap .meal-figure > .hapro-banner-media::after {
+  content: none !important;
+  display: none !important;
+}
+/* One orphan card stays centered at precisely the same width as its peers. */
+@media (min-width: 701px) {
+  body section .wrap .hapro-photo-grid > .hapro-photo-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1 !important;
+    width: calc((100% - var(--hapro-gallery-gap)) / 2) !important;
+    justify-self: center !important;
+  }
+}
+@media (max-width: 700px) {
+  :root {--hapro-gallery-gap: 18px; --hapro-card-pad: 20px;}
+  body section .wrap .hapro-photo-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 18px !important;
+    margin-top: 22px !important;
+  }
+  body section .wrap .hapro-photo-grid > .hapro-photo-card {
+    grid-column: auto !important;
+    width: 100% !important;
+  }
+  body section .wrap > .hapro-banner-media,
+  body section .wrap .meal-figure > .hapro-banner-media {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 20px auto !important;
+  }
+}
+
+</style>
 </head>
 <body>
 <header>
