@@ -677,13 +677,13 @@ body section .wrap .hapro-media > img {
   box-sizing:border-box!important;width:100%!important;max-width:100%!important;
   height:100%!important;min-height:0!important;max-height:none!important;aspect-ratio:auto!important;
   margin:0!important;padding:0!important;border:0!important;border-radius:0!important;
-  object-fit:cover!important;object-position:center!important;
-  transform:none!important;filter:none!important;background:var(--hapro-media-bg)!important;
+  object-fit:contain!important;object-position:center!important;
+  transform:none!important;filter:none!important;background:transparent!important;
 }
 body section .wrap .hapro-pack-media {background:#f5f5f3!important;}
 body section .wrap .hapro-pack-media > img {object-fit:contain!important;background:#f5f5f3!important;padding:16px!important;}
 body section .wrap .hapro-copy {
-  display:flex!important;flex:1!important;flex-direction:column!important;gap:12px!important;
+  display:flex!important;flex:1!important;flex-direction:column!important;gap:14px!important;
   width:100%!important;min-width:0!important;padding:var(--hapro-card-pad)!important;
   margin:0!important;text-align:start!important;line-height:1.8!important;
 }
@@ -722,6 +722,18 @@ html[lang="ar"] body section .wrap .hapro-media{direction:ltr!important;}
  body section .wrap .hapro-copy > p{font-size:15px!important;line-height:1.85!important;}
  body section .wrap > .hapro-banner-media,body section .wrap .meal-figure > .hapro-banner-media{margin:24px 0!important;}
 }
+
+/* The full original photograph stays in front; only its decorative backdrop fills the frame. */
+body section .wrap .hapro-media > img:not(.hapro-media-backdrop){z-index:1!important;}
+body section .wrap .hapro-media > img.hapro-media-backdrop {
+  z-index:0!important;object-fit:cover!important;object-position:center!important;
+  filter:blur(18px) brightness(.52)!important;transform:scale(1.12)!important;
+  background:#111!important;pointer-events:none!important;user-select:none!important;
+}
+body section .wrap .hapro-media > img.hapro-media-backdrop[hidden]{display:none!important;}
+body section .wrap .hapro-copy > :is(h3,h4,strong,p,a,span){align-self:stretch;}
+html[lang="ko"] body section .wrap :is(.desc,.ko-title,.caption,.photo-credit-note,.real-ramen-note,.meal-note){word-break:keep-all;overflow-wrap:break-word;}
+body section .wrap :is(.desc,.photo-credit-note,.real-ramen-note,.meal-note){line-height:1.85;}
 </style>
 </head>
 <body>
@@ -2094,6 +2106,52 @@ window.addEventListener('pageshow',apply);
   menu.addEventListener('click',function(e){if(e.target.closest('a')) setOpen(false);});
   document.addEventListener('keydown',function(e){if(e.key==='Escape') setOpen(false);});
   window.addEventListener('resize',function(){if(window.innerWidth>=768) setOpen(false);});
+})();
+</script>
+
+<script id="hapro-layout-complete-photos-20261114">
+(function(){'use strict';
+  const frames=[...document.querySelectorAll('.hapro-media')];
+  frames.forEach(frame=>{
+    const original=frame.querySelector('img');
+    if(!original||frame.classList.contains('hapro-pack-media'))return;
+    const backdrop=document.createElement('img');
+    backdrop.className='hapro-media-backdrop';backdrop.alt='';
+    backdrop.setAttribute('aria-hidden','true');backdrop.setAttribute('role','presentation');
+    backdrop.loading=original.loading||'lazy';backdrop.decoding='async';
+    if(original.referrerPolicy)backdrop.referrerPolicy=original.referrerPolicy;
+    backdrop.addEventListener('error',()=>{backdrop.hidden=true;});
+    backdrop.src=original.currentSrc||original.src;
+    frame.insertBefore(backdrop,original);
+    new MutationObserver(()=>{if(backdrop.src!==original.src){backdrop.hidden=false;backdrop.src=original.src;}}).observe(original,{attributes:true,attributeFilter:['src']});
+  });
+  let scheduled=false;
+  function alignRows(){
+    scheduled=false;
+    document.querySelectorAll('.hapro-photo-grid').forEach(grid=>{
+      const cards=[...grid.children].filter(c=>c.classList.contains('hapro-photo-card'));
+      cards.forEach(c=>{const copy=c.querySelector('.hapro-copy');if(copy)[...copy.children].forEach(el=>el.style.removeProperty('min-height'));});
+      const rows=new Map();
+      cards.forEach(c=>{const top=Math.round(c.getBoundingClientRect().top);if(!rows.has(top))rows.set(top,[]);rows.get(top).push(c);});
+      rows.forEach(row=>{
+        if(row.length<2)return;
+        const copies=row.map(c=>c.querySelector('.hapro-copy')).filter(Boolean);
+        const slots=Math.max(...copies.map(c=>c.children.length));
+        for(let i=0;i<slots;i++){
+          const elements=copies.map(c=>c.children[i]).filter(Boolean);
+          const height=Math.max(...elements.map(el=>el.getBoundingClientRect().height));
+          elements.forEach(el=>{el.style.minHeight=height+'px';});
+        }
+      });
+    });
+  }
+  function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(alignRows);}}
+  const resize=new ResizeObserver(schedule);
+  document.querySelectorAll('.hapro-photo-grid').forEach(g=>resize.observe(g));
+  new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+  window.addEventListener('resize',schedule);
+  if(document.fonts)document.fonts.ready.then(schedule);
+  schedule();
 })();
 </script>
 </body>
