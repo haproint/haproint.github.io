@@ -942,6 +942,23 @@ body section .wrap .hapro-banner-media,body section .wrap .meal-figure>.hapro-ba
 body section .wrap img.section-visual,body section .wrap img.main-img{display:block!important;max-width:100%!important;width:100%!important;height:auto!important;object-fit:contain!important;margin-inline:auto!important;padding:0!important;border:0!important}
 @media(max-width:700px){body section .wrap .hapro-photo-grid{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}body section .wrap .hapro-photo-grid>.hapro-photo-card:last-child:nth-child(odd){grid-column:auto!important;width:100%!important;justify-self:stretch!important}body section .wrap .hapro-photo-card>.hapro-copy{padding:18px!important}body section .wrap .hapro-photo-card .hapro-media{aspect-ratio:16/9!important}}
 </style>
+<style id="hapro-verified-layout-repair-20261115">
+/* Final override: one fixed frame, never crop the photograph. */
+:root{--hapro-gallery-gap:20px;--hapro-card-pad:18px}
+html,body{max-width:100%;overflow-x:clip}
+body section .wrap .hapro-photo-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px!important;align-items:stretch!important;margin:28px auto!important;width:100%!important}
+body section .wrap .hapro-photo-grid>.hapro-photo-card{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;padding:0!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;border:0!important;background:#111!important}
+body section .wrap .hapro-photo-card .hapro-media{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;aspect-ratio:16/9!important;height:auto!important;overflow:hidden!important;padding:0!important;margin:0!important;border:0!important;background:#111!important}
+body section .wrap .hapro-photo-card .hapro-media>img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;border:0!important;transform:none!important;filter:none!important;background:transparent!important}
+body section .wrap .hapro-photo-card .hapro-pack-media{background:#f5f5f3!important}
+body section .wrap .hapro-photo-card .hapro-pack-media>img{background:transparent!important;object-fit:contain!important;padding:8px!important}
+body section .wrap .hapro-photo-card>.hapro-copy{width:100%!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;gap:10px!important;flex:1!important;padding:18px!important;margin:0!important;text-align:center!important}
+body section .wrap .hapro-photo-card>.hapro-copy>*{max-width:100%!important;min-width:0!important;align-self:stretch!important;text-align:center!important;margin:0!important;overflow-wrap:break-word!important}
+body section .wrap .hapro-photo-card>.hapro-copy :is(h3,h4){line-height:1.5!important}
+body section .wrap .hapro-banner-media,body section .wrap img.section-visual{display:block!important;width:100%!important;max-width:100%!important;height:auto!important;object-fit:contain!important;object-position:center!important;margin-left:auto!important;margin-right:auto!important;border:0!important}
+html[lang="ar"] body section .wrap .hapro-photo-card>.hapro-copy,html[lang="ar"] body section .wrap .hapro-photo-card>.hapro-copy>*{direction:rtl!important;text-align:center!important}
+@media(max-width:700px){body section .wrap .hapro-photo-grid{grid-template-columns:minmax(0,1fr)!important;gap:18px!important}body section .wrap .hapro-photo-grid>.hapro-photo-card:last-child:nth-child(odd){grid-column:auto!important;width:100%!important}body section .wrap .hapro-photo-card>.hapro-copy{padding:16px!important}}
+</style>
 </head>
 <body>
 <header>
